@@ -25,9 +25,13 @@ function main() {
 
     var VSHADER_SOURCE = `
         attribute vec4 a_Position;
+        // attribute flaot a_PositionSize;
+        attribute float a_PointSize;
         uniform mat4 u_formMatrix;
         void main() {
             gl_Position = u_formMatrix * a_Position;
+            // gl_PointSize = a_PositionSize;
+            gl_PointSize = a_PointSize;
         }
     `;
     var FSHADER_SOURCE = `
@@ -49,6 +53,8 @@ function main() {
         console.log('failed set point');
         return;
     }
+    var a_Point = gl.getAttribLocation(gl.program, 'a_PointSize');
+    console.log(a_Point);
 
     var xformMatrix = new Matrix4();
     // 1旋转度数 后面三个确定旋转轴 绕那个轴那个为1
