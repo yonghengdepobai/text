@@ -82,11 +82,13 @@
     uniform mat4 u_MvpMatrix;
     uniform mat4 u_ModelMatrix; // 模型矩阵
     uniform mat4 u_NormalMatrix; // 用来变换法向的矩阵
-    uniform vec3 u_LightColor; // 光线颜色
-    uniform vec3 u_LightPosition; // 光源位置 (世界坐标系)
+    // uniform vec3 u_LightColor; // 光线颜色
+    // uniform vec3 u_LightPosition; // 光源位置 (世界坐标系)
     uniform vec3 u_LightDirection; // 归一化的世界坐标
-    uniform vec3 u_AmbientLight; // 环境光颜色
+    // uniform vec3 u_AmbientLight; // 环境光颜色
     varying vec4 v_Color;
+    varying vec3 v_Normal;
+    varying vec3 v_Position;
     void main() {
         gl_Position = u_MvpMatrix * a_Position;
         // 对法向量进行归一化
@@ -102,19 +104,37 @@
         // 计算光线方向和法向量的点积
         float nDotL = max(dot(u_LightDirection, normal), 0.0);
         // 计算漫反射光的颜色
-        vec3 diffuse = u_LightColor * vec3(a_Color) * nDotL;
+        // vec3 diffuse = u_LightColor * vec3(a_Color) * nDotL;
 
         // 计算环境光产生的反射光颜色
-        vec3 ambient = u_AmbientLight * a_Color.rgb;
+        // vec3 ambient = u_AmbientLight * a_Color.rgb;
         // 相加
-        v_Color = vec4((diffuse + ambient), 1.0);
+        // v_Color = vec4((diffuse + ambient), 1.0);
+        v_Color =  a_Color;
+        v_Position = vec3(u_ModelMatrix * a_Position);
+        v_Normal = normalize(vec3(u_NormalMatrix * a_Normal));
     }
  `;
  var FSHADER_SOURCE = `
     precision mediump float;
     varying vec4 v_Color;
+    uniform vec3 u_LightColor; // 光线颜色
+    uniform vec3 u_LightPosition; // 光源位置 (世界坐标系)
+    uniform vec3 u_AmbientLight; // 环境光颜色
+    varying vec3 v_Normal;
+    varying vec3 v_Position;
     void main() {
-        gl_FragColor = v_Color;
+        // 对法线进行归一化
+        vec3 normal = normalize(vec3(a_Normal));
+        // 计算光线方向变归一化
+        vec3 lightDirection= normalize(u_LightPosition - v_Position);
+        // 计算光线方向和法向量的点积
+        float nDotL = max(dot(lightDirection, normal), 0.0);
+        // 计算diffuse, ambient以及最终光的颜色
+        vec3 diffuse = u_LightColor * v_Color.rgb * nDotL;
+        vec3 ambient = u_AmbientLight * v_Color.rgb;
+        // gl_FragColor = v_Color;
+        gl_FragColor = vec4(diffuse + ambient, v_Color.a);
     }
  `;
 
