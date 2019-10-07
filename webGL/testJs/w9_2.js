@@ -57,9 +57,15 @@ gl.Parameteri()）
     precision mediump float;
     #endif
     uniform sampler2D u_Sampler;
+    uniform float isFrist;
     varying vec2 v_TexCoord;
     void main() {
         vec4 color = texture2D(u_Sampler, v_TexCoord);
+        if (isFrist == 1.0) {
+            // color = vec4(1.0, 0.3, 0.4, 1.0);
+        } else {
+            // color = vec4(0.4, 0.8, 0.7, 1.0);
+        }
         gl_FragColor = color;
     }
  `
@@ -79,7 +85,7 @@ gl.Parameteri()）
     program.a_Position = gl.getAttribLocation(program, 'a_Position');
     program.a_TexCoord = gl.getAttribLocation(program, 'a_TexCoord');
     program.u_MvpMatrix = gl.getUniformLocation(program, 'u_MvpMatrix');
-    // program.u_Sampler = gl.getUniformLocation(program, 'u_Sampler');
+    program.isFrist = gl.getUniformLocation(program, 'isFrist');
 
     // var cube = initVertexBuffers_9_2(gl);
     var cube = initVertexBuffersForCube(gl);
@@ -88,7 +94,7 @@ gl.Parameteri()）
 
     var texture = initTextures(gl);
 
-    var fbo = initFramebufferObject(gl);
+    var fbo = initFramebufferObject(gl); 
 
     gl.enable(gl.DEPTH_TEST);
 
@@ -173,6 +179,9 @@ gl.Parameteri()）
 
      o.numIndex = index.length;
 
+     gl.bindBuffer(gl.ARRAY_BUFFER, null);
+     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
      return o;
  }
 
@@ -199,10 +208,12 @@ gl.Parameteri()）
     var o = new Object();
 
     o.vertexBuffer = initArrayBufferForLaterUse(gl, vetices, 3, gl.FLOAT);
-    o.texCoordBuffer = initArrayBufferForLaterUse(gl, texCoords, 3, gl.FLOAT);
+    o.texCoordBuffer = initArrayBufferForLaterUse(gl, texCoords, 2, gl.FLOAT);
     o.indexBuffer = initElementArrayBufferForLaterUse(gl, index, gl.UNSIGNED_BYTE);
 
     o.numIndex = index.length;
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
     return o;
  }
 
@@ -237,9 +248,15 @@ gl.Parameteri()）
          gl.bindTexture(gl.TEXTURE_2D, texture);
          
          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        //   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        //  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        //  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        //  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+         
          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
 
          gl.uniform1i(u_Sampler, 0);
+         gl.bindTexture(gl.TEXTURE_2D, null);
 
      }
      image.src = '../webGL/WebGL_Guide_Code/resources/sky_cloud.jpg';
@@ -249,27 +266,64 @@ gl.Parameteri()）
  function initFramebufferObject(gl) {
      var framebuffer, texture, depthBuffer;
 
-    framebuffer = gl.createFramebuffer();
+    framebuffer = gl.createFramebuffer(); // // 创建帧缓冲区对象
 
+    // 创建纹理对象变设置其尺寸和参数
     texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT, 0, gl.RGB,
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT, 0, gl.RGBA,
         gl.UNSIGNED_BYTE, null);
+    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT, 0, gl.RGBA,
+    //         gl.UNSIGNED_BYTE, null);
     // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
-    framebuffer.texture = texture;
+    framebuffer.texture = texture; // 存储纹理对象
 
-    depthBuffer = gl.createRenderbuffer();
-    gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
+    depthBuffer = gl.createRenderbuffer(); // 创建渲染缓冲区
+
+    gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer); // 绑定渲染缓冲区
+    // 设置尺寸
+    /**
+     * gl.renderbufferStorage(taget, internalformat, width, height)
+     * target必须为gl.RENDERBUFFER
+     * internalformat 指定渲染缓冲区的数据格式
+     *                  gl.DEPTH_COMPONENT16G表示渲染缓冲区指替代深度缓冲区
+     *                  gl.STENCIL_INDEXS   表示渲染缓冲区将替代模板缓冲区
+     *                  gl. RGBA4    表示渲染缓冲区将替代颜色颜色缓冲区 
+     *                  gl.RGB5_A1  RGBA4表示4个分量各占据4个比特 RGB5_A1 rgb各5个比特a一个比特
+     *                  gl.RGB565   rgb分另占据5，6，5个比物
+     * width和height指定渲染缓冲区的高度和宽以像素为单位
+     */
     gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT);
     // gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT);
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER,  framebuffer);
+    /**
+     * gl.bindFramebuffer(target, framebuffer)
+     * 将framebuffer指定的帧缓冲区对象绑定到target目标上，如果framebuffer为空，那么已绑定到target目标上的
+     * 帧缓冲区对象将被解除绑定
+     * target必须为gl.FRAMEBUFFER
+     */
+    gl.bindFramebuffer(gl.FRAMEBUFFER,  framebuffer); // 绑定帧缓冲区对象
+    // 将帧缓冲区对象的颜色关联对象指定为一个纹理对象
+    /**
+     * gl.framebufferTexture2D(target, attachment, textarget, texture, 0);
+     * target必须为gl.FRAMEBUFFER
+     * attachment   指定关联的类型
+     *              gl.COLOR_ATTACHMENT0    表示texture是颜色关联对象
+     *              gl.DEPTH_ATTACHMENT     表示texture是深度关联对象
+     */
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+    // 将帧缓冲区对象的深度关联对象指定为一个一个渲染缓冲区
     gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
 
+    // 检查帧缓冲区对象是否配置正确
     var e = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    console.log(e, gl.FRAMEBUFFER_COMPLETE !== e);
+
+    // gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    // gl.bindTexture(gl.TEXTURE_2D, null);
+    // gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 
     return framebuffer;
 
@@ -282,6 +336,7 @@ gl.Parameteri()）
      gl.clearColor(0.2, 0.2, 0.4, 1.0);
      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    //  怎么确定图形画入了帧缓冲区 gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);？
      drawTexturedCube(gl, gl.program, cube, angle, texture, viewProjMatrixFBO);
 
      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -290,6 +345,7 @@ gl.Parameteri()）
      gl.clearColor(0.0, 0.0, 0.0, 1.0);
      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    //  console.log(texture, fbo.texture);
      drawTexturedPlane(gl, gl.program, plane, angle, fbo.texture, viewProjMatrix);
  }
 
@@ -298,22 +354,26 @@ gl.Parameteri()）
 
  function drawTexturedCube(gl, program, o, angle, texture, viewProjMatrix) {
      g_modelMatrix.setRotate(20.0, 1.0, 0.0, 0.0);
-     g_mvpMatrix.rotate(angle, 0, 1, 0);
+     g_modelMatrix.rotate(angle, 0, 1, 0);
 
      g_mvpMatrix.set(viewProjMatrix);
      g_mvpMatrix.multiply(g_modelMatrix);
+     gl.uniform1f(program.isFrist, 1.0);
      gl.uniformMatrix4fv(program.u_MvpMatrix, false, g_mvpMatrix.elements);
 
+    //  console.log(o);
      drawTexturedObject(gl, program, o, texture);
  }
 
  function drawTexturedPlane(gl, program, o, angle, texture, viewProjMatrix) {
     g_mvpMatrix.setTranslate(0, 0, 1);
     g_modelMatrix.rotate(20.0, 1.0, 0.0, 0.0);
-    g_mvpMatrix.rotate(angle, 0, 1, 0);
+    g_modelMatrix.rotate(angle, 0, 1, 0);
 
     g_mvpMatrix.set(viewProjMatrix);
     g_mvpMatrix.multiply(g_modelMatrix);
+    // console.log(g_mvpMatrix.elements);
+    gl.uniform1f(program.isFrist, 2.0);
     gl.uniformMatrix4fv(program.u_MvpMatrix, false, g_mvpMatrix.elements);
 
     drawTexturedObject(gl, program, o, texture);
@@ -327,11 +387,12 @@ gl.Parameteri()）
      gl.bindTexture(gl.TEXTURE_2D, texture);
 
      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, o.indexBuffer);
+    //  console.log(gl.TRIANGLES, o, 0);
      gl.drawElements(gl.TRIANGLES, o.numIndex, o.indexBuffer.type, 0);
  }
 
  function initAttributeVariable(gl, a_attribute, buffer) {
-     console.log(buffer);
+    //  console.log(buffer);
      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
      gl.vertexAttribPointer(a_attribute, buffer.num, buffer.type, false, 0, 0);
      gl.enableVertexAttribArray(a_attribute);
