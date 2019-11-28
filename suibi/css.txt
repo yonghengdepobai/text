@@ -1,0 +1,184 @@
+transform: none | <transform-function> [ <transform-function> ]*
+transform: 
+rotate transform: rotate(30deg)
+ | scale transform: scale(1, 2) transform: scaleX(1) transform: scaleY(2)
+ | skew(扭曲) transform: skew(30deg, 10deg) transform: skewX(30deg) transform: skewY(10deg)
+ | translate transform: translate(100px, 200px) transform: translateX(100px) transform: translateY(200px)
+ | matrix // matrix(a, b, c, d, e, f) 以变换矩阵的形式定指一个2D变换
+ transform-origin(x,y) x,y取值0到100% 改变元素的基点（默认基点是中心点）位置 就是旋转点
+
+transition 允许css的属性值在一定的时间区间内平滑地过渡，并圆滑地以动画效果改变css的属性值
+transition: [<'transition-property'>] || <'transition-duration'> || <'transition-time-function'>
+    || <'transition-delay'>
+
+transition-property: none | all | [ <IDENT(元素属性名)> ] [',' <IDENT>]
+ // 指定当前元素其中一个属性改变时执行transition效果
+
+ transition-duration: <time> [, <time>]*
+ // 用来指定元素转换过程持续时间
+
+ transition-time-function: ease（逐渐变慢） | liner（匀速） | ease-in（加速） | ease-out（减速）
+  | ease-in-out（加速然后减速） 
+  | cubic-bezier(<number>, <number>, <number>, <number>)（自已定义一个时间曲线，通过贝赛尔曲线来实现）
+ // 允许你根据时间的推进去改变属性值的变换速率
+
+ transition-delay: <time> [, <time>]*
+ // 指定一个动画开始执行的时间
+
+ animation 只应用在页面上已存在的DOM元素上
+
+ keyframes 关键帧
+ 他的命名由@keyframes开头，后面紧接着是这个’动画的名称‘加上一对花括号’{}‘，括号中就是一些不同时间段样式规则
+ @keyframes aaa {
+     from {property: properties value}
+     percentage {property: properties value}
+     to {property: properties value}
+     // 也可 0 到 100%
+ }
+ animation 类似于transtion属性，他们都是随着时间改变元素的属性值。transition需要触发一个事件（hover事件或click事
+ 件）才会触发。animation不需要触发任何事件就可进行
+ animation-name: 'aaa'; // 动画属性名 由@keyframes定义的动画名
+ animation-duration: 10s; // 动画持续时间
+ animation-time-function: ease-in-out; // 动画频率，和 transition-time-function 一样
+ animation-iteration-count: 10; // 定义循环次数 infinite为无限次
+ animation-direction: alternate; 定义动画播放的方向 normal向前 alternate 偶数次向前，奇数次向反方向播放
+
+ // css 三角形
+<style>
+    div {
+        width: 0; height: 0;
+        border-top: 40px solid transparent;
+        border-left: 40px solid transparent;
+        border-right: 40px solid transparent;
+        border-bottom: 40px solid #ff0000;
+    }
+</style>
+<body><div></div></body>
+
+盒子模型 content border padding margin
+
+BFC即Block Fromatting Context(块级格式化上下文)
+是web页面中盒模型布局的CSS渲染模式，指一个独立的渲染区域或者说是一个隔离的独立容器
+形成BFC的条开
+1.浮动元素，float除none以外的值
+2.定位元素，positon(absolute, fixed)
+3.display为以下其中之一的值inline-block，table-cell, table-caption;
+5.display为flex或inline-flex、grid或者inline-grid
+4.overflow除了visible以外的值（hidden, auto, scroll);
+
+BFC特性
+1.内部的box会在垂直方向上一个接一个的放置
+2.垂直方向上的距离由margin决定
+在常规文档流中，两个兄弟盒子之间的垂直距离是由他们的外边距所决定的，但不是他们的两个外边距之和，而是以较大的为准。
+3.bfc的区域不会与float的元素区域重叠
+4.计算bfc的高度时，浮动元素也参与计算
+5.bfc就是页面上的一个独立容器，容器里面的子元素不会影响外面元素
+
+css clear 属性规定元素的哪一侧不允许其他浮动元素
+
+层叠上下文（stacking context）
+    在CSS2.1规范中，每个盒模型的位置都是三维的，分别是平面画布的X轴Y轴以及表示层叠的Z轴
+    触发条件
+        根层叠上下文（<html>）
+        position属性为非static值并设置z-index为具体数值
+        css3中的属性也可以产生层叠上下文
+        flex
+        transform
+        opacity
+        filter
+        will-change
+        overflow-scrolling
+    层叠等级（stacking level）
+        在同一个层叠上下文中，它描述定义的是该层叠上下文中的层叠上下文在z轴的上下顺序
+        在其他普通元素中，它描述定义的是这些普通元素在z轴上的上下顺序（普通元素的层叠等级优先由其所在的层叠上下文决定）
+        （层叠等级的比较只有在当前层缀上下文元素中才有意义，不同层叠上下文中比较层叠等级是没有意义的）
+    background/border < z-index为负值 < 块级元素 < 浮云元素 < 行内元素 < z-index: 0/auto < z-index为正值
+        首先判断两要比较的元素是否处于同一个层叠上下文中
+        如果处于同一个层叠上下文中，则谁的层叠的等级大，谁靠上
+        如果处于不同的层叠上下文中，则先比较他们所处的层叠上下文的层叠等级
+        当两个元素层叠等级相同，层叠顺序相同时，在DOM结构中后面的元素层叠等级在前面的元素之上
+    CSS3中新增的选择器以及属性
+        属性选择器
+            E[attr^='val']  属性attr的值以'val'开头的元素
+            E[attr$='val']  属性attr的值以'val'结尾的元素
+            E[attr*='val']  属性attr的值包含'val'的元素
+        结构伪类选择器
+            E:root  匹配元素所在文档的根元素，对于HTML文档，根元素始终是<html>
+            E:nth-child(n)  匹配其父元素的第n个子元素，第一个编号为1
+            E:nth-last-child(n) 匹配其父元素的倒数第n个元素
+            E:nth-of-type(n)    与nth-child(n)作用类似，但是仅匹配使用同种标签的元素
+            E:nth-last-of-type(n)
+            E:last-child    父元素最后一个子元素
+            E:frist-of-type
+            E:last-of-type
+            E:only-child    匹配父元素下仅有的一个子元素
+            E:only-of-type  匹配父元素下使用同种标签的唯一一个子元素
+            E:empty 匹配一个不包含任何子元素的元素，文本节点也被看作子元素
+            E:not(selector)     匹配不符合当前选择器的任何元素
+        css3新属性
+            border-image    边框图片
+            background-szie     规定背影图片的尺寸
+            background-origin   规定背影图片的定位区域
+            background-clip     规定背影图片从什么位置开始裁切
+            text-shadow     文本阴影
+            text-overflow   文本截断
+            word-wrap       对长单词进行拆分，并换到下一行
+    清除浮动
+        额外标签法（在最后一个浮动元素后面新加一个标签如<div class='clear'></div>,并在其CSS样式中设置clear:both）
+        给父级设置高度
+        触发父级BFC
+        使用伪类元素
+            .clearfix::after{content: '', display: block, height: 0, line-height: 0, clear: both
+            visibility: hidden; font-size: 0}
+            .clearfix {zoom: 1} // 兼容IE6/7, 即触发hasLayout
+        居中布局
+            水平居中
+                若是行内元素，则直接给其父元素设置text-align: center即可
+                若是块级元素，则直接给元素设置margin:0 auto;
+                若是子元素包含浮动元素，则给父元素设置width:fit-content并且配合margin
+                flex
+                position left margin-left transform
+            垂直居中
+                若是单行文本    直接line-height 父元素高度
+                若是行内块级元素    vertical-align: middle  配置table/table-cell
+                flex
+                知道高度 定位 top   transform(0,-50%)/知道高margin-top -一半的度
+    CSS优先级和权重
+        !important  无 表示1,0,0,0,0
+        行内样式（style)    1,0,0,0
+        id先择器（#id)      0,1,0,0
+        类，伪类和属选择器(.class, :frist-child, [type='text']) 0,0,1,0;
+        标签和伪元素选择器 (h1, ::after)    0,0,0,1
+        通配符、子选择器、相邻选择器（*, div > p, p + p）   0,0,0,0
+        继承（span {color: inherit;}）  无
+        浏览器默认值    无
+    移动端1px物理像素边框
+        移动端有物理像素（physical piex）和设备独立像素（density-independent piex）
+        物理像素和设备独立像素也有设备像素比（device pixel ratio) 简称dpr
+        dpr = 物理像素 / 设置像素
+        js 通过window.devicePiexlRatio来获取当前设备的dpr
+        css 可以通过device-pixel-ratio,来进行媒体查询
+    三栏布局
+        使用绝对定位
+        flex
+        双飞翼布局
+        圣杯布局
+    等高布局
+    三角形实现
+    link @import
+    浏览器怎样解析CSS选择器
+    是从右向左解析的
+    CSS优化
+        层级尽量扁平，避免嵌套过多层级的选择器
+        使用特定的选择器，避免解析器过多层级查找
+        减少使用通配符与属性选择器
+        减少不必要的多余属性
+        避免使用!important标识，可以选择其他选择器
+        实现动画时优先使用CSS3动画，动画时脱离文档流，开启硬件加速
+        使用link标签代替@import;
+        将渲染首屏内容所需的关键CSS内联到HTML
+        使用资源预加载指令preload让浏览器提前加载CSS资源并缓存
+        使用Gulp,webpack等构建工具对CSS文件进行压缩处理
+
+
+

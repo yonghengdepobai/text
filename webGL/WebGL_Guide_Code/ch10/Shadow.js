@@ -156,7 +156,7 @@ function drawTriangle(gl, program, triangle, angle, viewProjMatrix) {
 
 function drawPlane(gl, program, plane, viewProjMatrix) {
   // Set rotate angle to model matrix and draw plane
-  g_modelMatrix.setRotate(-45, 0, 1, 1);
+  // g_modelMatrix.setRotate(-45, 0, 1, 1);
   draw(gl, program, plane, viewProjMatrix);
 }
 
@@ -192,7 +192,7 @@ function initVertexBuffersForPlane(gl) {
 
   // Vertex coordinates
   var vertices = new Float32Array([
-    3.0, -1.7, 2.5,  -3.0, -1.7, 2.5,  -3.0, -1.7, -2.5,   3.0, -1.7, -2.5    // v0-v1-v2-v3
+    3.0, -3.7, 2.5,  -3.0, -1.7, 2.5,  -3.0, -1.7, -2.5,   3.0, -3.7, -2.5    // v0-v1-v2-v3
   ]);
 
   // Colors

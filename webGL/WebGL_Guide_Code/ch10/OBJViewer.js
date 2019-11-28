@@ -170,6 +170,7 @@ function draw(gl, program, angle, viewProjMatrix, model) {
   gl.uniformMatrix4fv(program.u_MvpMatrix, false, g_mvpMatrix.elements);
 
   // Draw
+  // console.log(g_drawingInfo);
   gl.drawElements(gl.TRIANGLES, g_drawingInfo.indices.length, gl.UNSIGNED_SHORT, 0);
 }
 
@@ -179,6 +180,7 @@ function onReadComplete(gl, model, objDoc) {
   var drawingInfo = objDoc.getDrawingInfo();
 
   // Write date into the buffer object
+  console.log(model);
   gl.bindBuffer(gl.ARRAY_BUFFER, model.vertexBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, drawingInfo.vertices, gl.STATIC_DRAW);
 

@@ -321,6 +321,16 @@ var index = new Uint8Array([
    20,21,22,  20,22,23     // back
  ]);
 
+
+//  var index = new Uint8Array([
+//     0, 1, 2,   1, 2, 3,    // front
+//     0, 4, 5,   5, 1, 0,    // right
+//     0, 3, 7,   7, 4, 0,    // up
+//     1, 5, 6,   6, 2, 1,    // left
+//     2, 3, 7,   7, 6, 2,    // down
+//     4, 5, 6,   6, 7, 4     // back
+//  ]);
+
  if (!initArrayBuffer(gl, vertiecs_base, 3, gl.FLOAT, 'a_Position')) { console.log('???'); return -1;}
  if (!initArrayBuffer(gl, texCoords, 2, gl.FLOAT, 'a_TexCoord')) { console.log('???sss'); return -1;}
  if (!initArrayBuffer(gl, faces, 1, gl.UNSIGNED_BYTE, 'a_Face')) { console.log('???sss'); return -1;}
