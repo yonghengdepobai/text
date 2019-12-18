@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>魔方</title>
+    </head>
+    <body onload='main()'>
+        <canvas id='webgl' width="400px" height="400px"></canvas>
+        <div>
+            <div>
+                <button onclick="rotateMF('x', 0)">X1</button>
+                <button onclick="rotateMF('x', 1)">X2</button>
+                <button onclick="rotateMF('x', 2)">X3</button>
+            </div>
+            <div>
+                <button onclick="rotateMF('y', 0)">Y1</button>
+                <button onclick="rotateMF('y', 1)">Y2</button>
+                <button onclick="rotateMF('y', 2)">Y3</button>
+            </div>
+            <div>
+                <button onclick="rotateMF('z', 0)">Z1</button>
+                <button onclick="rotateMF('z', 1)">Z2</button>
+                <button onclick="rotateMF('z', 2)">Z3</button>
+            </div>
+        </div>
+        <script src='../webGL/lib/webgl-utils.js'></script>
+        <script src='../webGL/lib/webgl-debug.js'></script>
+        <script src='../webGL/lib/cuon-utils.js'></script>
+        <script src='../webGL/lib/cuon-matrix.js'></script>
+        <script src='./mfMy.js'></script>
+    </body>
+</html>

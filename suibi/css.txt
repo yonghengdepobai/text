@@ -180,5 +180,20 @@ css clear 属性规定元素的哪一侧不允许其他浮动元素
         使用资源预加载指令preload让浏览器提前加载CSS资源并缓存
         使用Gulp,webpack等构建工具对CSS文件进行压缩处理
 
+    css标准备盒子模型
+        又称为框模型（Box Model),包含了元素内容（content)、内边矩（padding)、边框（border）、外边距（margin）
+    伪类
+        :hover
+        :active
+        :first-child
+        :visited
+    伪元素
+        :first-line
+        :first-letter
+        :after
+        :befor
+    区别 它们是否创造了新元素（抽象）伪类用一个冒号 伪元素用两个
+
+
 
 

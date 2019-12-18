@@ -1,0 +1,281 @@
+<html>
+    
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <!-- < meta http-equiv="Content-Type" content="text/html; charset=utf-8" > -->
+        <style>
+            .all {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+            }
+            .left {
+                width: 3vw;
+                /* height: 27vw; */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .leftText {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                height: 3vw;
+            }
+            .main {
+                /* width: 40%; */
+                /* width: 27vw; */
+                /* height: 27vw; */
+                display: flex;
+                flex-direction: column;
+            }
+            .level_4 {
+                flex: 1;
+                /* border: 1px solid #ececec; */
+                display: flex;
+                /* flex-direction: column; */
+            }
+            .level_3 {
+                flex: 1;
+                border: 1px solid #ececec;
+                display: flex;
+                flex-direction: column;
+            }
+            .level_2 {
+                flex: 1;
+                /* border: 1px solid #ececec; */
+                display: flex;
+            }
+            .level_1 {
+                flex: 1;
+                border: 1px solid #ececec;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .level_1 input {
+                width: 3vw;
+                height: 3vw;
+                text-align: center;
+                outline: none;
+                border: none;
+            }
+            .bottomF {
+                width: 100vw;
+            }
+            .bottom {
+                /* flex: 1; */
+                display: flex;
+                width: 32vw;
+            }
+            .bottomText {   
+               flex: 1;
+               text-align: center;
+            }
+            .oneDiv {
+                border: 2px solid #ececec;
+                display: flex;
+                box-sizing: border-box;
+                background-color: white;
+                flex: 0 0 33.3%;
+                flex-flow: row wrap;
+            }
+            .redColor {
+                color: blue;
+            }
+            /* .erDiv {
+                box-sizing: border-box;
+                background-color: white;
+                flex: 0 0 33.3%;
+                height: 50px;
+                width: 50px;
+                border: 1px solid #ececec;
+            } */
+        </style>
+    </head>
+    <body>
+        <div class="all">
+            <div class="left">
+                <div class="leftText">A</div>
+                <div class="leftText">B</div>
+                <div class="leftText">C</div>
+                <div class="leftText">D</div>
+                <div class="leftText">E</div>
+                <div class="leftText">F</div>
+                <div class="leftText">G</div>
+                <div class="leftText">H</div>
+                <div class="leftText">I</div>
+                <!-- <div class="leftText"></div> -->
+            </div>
+            <div id='main' class="main">
+
+            </div>
+            <div class="bottomF">
+                <div class='bottom'>
+                    <div class="bottomText"></div>
+                    <div class="bottomText">1</div>
+                    <div class="bottomText">2</div>
+                    <div class="bottomText">3</div>
+                    <div class="bottomText">4</div>
+                    <div class="bottomText">5</div>
+                    <div class="bottomText">6</div>
+                    <div class="bottomText">7</div>
+                    <div class="bottomText">8</div>
+                    <div class="bottomText">9</div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button onclick="saveData()">
+                提交数据
+            </button>
+        </div>
+    </body>
+    <script>
+
+let BaseArrs =
+                    [
+                        [[],[],[],[],[ ],[ ],[ ],[],[ ]],
+                        [[ ],[],[ ],[ ],[],[ ],[ ],[],[ ]],
+                        [[],[ ],[ ],[ ],[],[ ],[],[ ],[ ]],
+                        [[ ],[ ],[],[ ],[],[ ],[ ],[],[ ]],
+                        [[ ],[ ],[],[ ],[],[ ],[],[ ],[ ]],
+                        [[ ],[],[ ],[ ],[],[],[],[ ],[ ]],
+                        [[ ],[ ],[],[ ],[],[ ],[ ],[ ],[]],
+                        [[ ],[],[ ],[ ],[],[ ],[ ],[],[ ]],
+                        [[ ],[],[ ],[ ],[ ],[],[ ],[ ],[ ]]
+                    ];
+                    // let BaseArrs = [
+                    //     [[],[],[],[8],[ ],[ ],[ ],[2],[ ]],
+                    //     [[ ],[6],[ ],[ ],[2],[ ],[ ],[4],[ ]],
+                    //     [[3],[ ],[ ],[ ],[4],[ ],[9],[ ],[ ]],
+                    //     [[ ],[ ],[6],[ ],[9],[ ],[ ],[5],[ ]],
+                    //     [[ ],[ ],[9],[ ],[1],[ ],[2],[ ],[ ]],
+                    //     [[ ],[5],[ ],[ ],[3],[8],[7],[ ],[ ]],
+                    //     [[ ],[ ],[8],[ ],[6],[ ],[ ],[ ],[4]],
+                    //     [[ ],[9],[ ],[ ],[5],[ ],[ ],[6],[ ]],
+                    //     [[ ],[2],[ ],[ ],[ ],[1],[ ],[ ],[ ]]
+                    // ]
+
+        function setMain() {
+            let mainDiv = document.getElementById('main');
+            mainDiv.innerHTML = '';
+            let oneDivList = [];
+            // for (let i = 0; i < 9 ; i++) {
+            //     let oneDiv = document.createElement('div');
+            //     oneDiv.classList.add('oneDiv');
+            //     for (let j = 0; j < 9; j++) {
+            //         let erDiv = document.createElement('div');
+            //         erDiv.classList.add('erDiv');
+            //         oneDiv.appendChild(erDiv);
+            //     }
+            //     mainDiv.appendChild(oneDiv);
+            // };
+            function addThreeDom(a, dom, str) {
+                for (let i = 0; i < 3; i++) {
+                    let tDom = document.createElement('div');
+                    tDom.classList.add('level_' + a);
+                    tDom.setAttribute('num', i);
+                    // str = str + '_' + (a + '|' + i);
+                    // tDom.classList.add(i);
+                    if (a == 1) {
+                        tDom.classList.add('end');
+                    }
+                    if (a > 1) {
+                        addThreeDom(a - 1, tDom, str);
+                    }
+                    dom.appendChild(tDom);
+                }
+            }
+            addThreeDom(4, mainDiv,'lev_');
+            
+            let endArr = document.getElementsByClassName('end');
+            for (let item of endArr) {
+                let temp = item;
+                let arr = [];
+                let index = item.getAttribute('num');
+                while (temp) {
+                    temp = temp.parentNode;
+                    if (temp.classList.contains('main')) {
+                        break;
+                    }
+                    arr.push(temp.getAttribute('num'));
+                }
+                // console.log(arr, index);
+                let arrs1 = arr.reverse().concat(index);
+                let x = document.createElement('input');
+                x.setAttribute('arr', arrs1.join());
+                let num = getNum(arr, index);
+                x.setAttribute('coorid', num.join());
+                if (BaseArrs[num[0]][num[1]] != '') {
+                    x.value = BaseArrs[num[0]][num[1]];
+                    x.classList.add('blackColor');
+                    // x.readOnly = true;
+                } else {
+                    x.classList.add('redColor');
+                }
+                item.appendChild(x);
+                
+            }
+        }
+        window.onload = () => {
+            setMain();
+            setEvent();
+        };
+
+        function getNum(arr, index) {
+            // console.log(arr);
+            if (arr) {
+                // let arr2 = arr.reverse();
+                let arr2 = arr;
+            // 0 0-3 大行 0 0 1 1 => 1 1
+            let x = ((arr2[0] - 0) * 3) + (arr2[2] - 0);
+            // 0 大列 
+            let y = ((arr2[1] - 0) * 3) + (index - 0)
+            // console.log(arr2,index, x, y);
+            return [x, y];
+            }
+
+        }
+
+        function setEvent() {
+            const input  = document.querySelectorAll('input');
+            for(let inp of input) {
+                inp.addEventListener('input', updataValue);
+            }
+        }
+        function updataValue(e) {
+            let coorid = e.path[0].getAttribute('coorid').split(',');
+            // console.log(e, e.path[0].getAttribute('coorid'));
+            BaseArrs[coorid[0]][coorid[1]] = [(e.path[0].value - 0) || e.path[0].value];
+
+        }
+        function saveData() {
+            console.log(BaseArrs);
+            let url = 'http://192.111.111.220/tp5/public/test.php/api/Sudoku/getAnswer';
+            let req = new Request(url, {method: 'POST', cache: 'reload', body:JSON.stringify(BaseArrs)});
+            fetch(req).then(function(response) {
+            return response.json();
+            }).then(function(data) {
+                // console.log(data);
+                if (data.data) {
+                    BaseArrs = data.data;
+                    console.log(BaseArrs);
+                    const input  = document.querySelectorAll('input');
+                    for (let inp of input) {
+                        if (inp.classList.contains('redColor')) {
+                            let coorid = inp.getAttribute('coorid').split(',');
+                            console.log(coorid, BaseArrs[coorid[0], [1]]);
+                            inp.value =  BaseArrs[coorid[0]][coorid[1]];
+                        }
+                    }
+                }
+                
+                // setMain();
+            // insertPhotos(json);
+            });
+        }
+        
+
+    </script>
+</html> 

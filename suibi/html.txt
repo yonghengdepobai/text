@@ -1,0 +1,218 @@
+页面加载优化
+    1.减少HTTP请求 优化图片
+    2.使用CDN
+    3.添加Expires头
+    4.压缩组件 合并压缩js css
+    5代码优化
+        按需加载
+        优化cookie
+
+自适应布局
+    1.浮云布局 float:left|right
+        <div class='rwd-header'>Header</div>
+        <div class='rwd-content'>
+            <div class='rwd-content-left'>Left</div>
+            <div class='rwd-content-body'>
+                <div class='rwd-content-bodyTop'>Top Content</div>
+                <duv class='rwd-content-bodyBottom'>Bootom Content</div>
+            </div>
+            <div class='rwd-content-right'>Right</div>
+        </div>
+        <div class='rwd-footer>Footer</div>
+        // css
+        .rwd-content-left, rwd-content-body, rwd-content-right { float: left;} // 给中间三栏设置浮动
+        .rwd-content::after {content: '', clear: both, display: block;} // 清除浮动
+        .rwd-content-left { width: 20%; height: 200px;}
+        .rwd-content-body {width: 60%;}
+        .rwd-content-right {width: 20%; height: 300px;}
+
+    @media查询
+        当@media的查贸询条件满足时，应用{}中的样式 screen指屏幕 print指打印页面
+        @media做的事完全可以用javascript代替，用js添加一个class或者直接用js修改css属性。优点是浏览器全兼容，缺点是用js
+        @media only screen and (max-width: 1024px) {
+            .rwd-content-left{ width: 30%;}
+            .rwd-content-content-body {width: 70%;}
+            .rwd-content-content-right {width: 100;}
+        }
+        @media only screen and (max-width: 768px) {
+            [class*='rwd-content-'] {width: 100%}
+        }
+    2.inline-block display: inline-block
+        <div class="rwd-header">Header</div>
+        <div class="rwd-content"
+        ><div class="rwd-content-left">Left</div
+            ><div class="rwd-content-body"
+            ><div class="rwd-content-bodyTop">Top Content</div
+            ><div class="rwd-content-bodyBottom">Bottom Content</div
+        ></div
+        ><div class="rwd-content-right">Right</div>
+        </div>
+        <div class="rwd-footer">Footer</div>
+        html和浮动布局一样，为了避免空白字符压缩（white space collapse）的问题， 向上面这样写
+        空白字符问题处理方法
+            1不换行向上面一样 换行就会默认两个inline-block元素之间用空格分开（。。。）
+            2给父元素设置font-size: 0 缺点：这样就要给子元素在设置一下font-size(如果子元素需要)
+            3不用inline-block 用float float 忽略空白字符的 布局应该要重新设置
+            4word-spacing 这个属性是用来设置单词之间的空白符的
+            5white-space-collapse 用来检索元素包含的空白符 // 这个在不同浏览器上实现不一样
+                collapse：将一系列空白折叠为一个单独的字符
+                preserve-breaks：折叠空白符，换行符保留为强制换行符
+                preserve:阻止折叠空白符，换行符保留为强制换行符
+                discard:抛弃所有空白 
+        css
+        .rwd-content-left, .rwd-content-body,.rwd-content-right {
+            display: inline-block;        vertical-align: top;        }
+        // 换掉这两个就可以了
+    float或inline-block不能很好的调整元素顺序 只能用js来调整
+    3.flexible box display: flex;
+        html和第一个是一样的
+        css
+        1)flex-direction, 元素排列方向 选水平方向从左到右 选 flex-direction: row;
+        .container {flex-direction: row | row-reverse | column | column-reverse;}
+        2)flex-wrap 这个是单行布局，不要换行，选flex-wrap: nowrap | wrap | wrap-reverse;
+        3)justify-content, 水平方向如何分配 选 sapce-between
+        justify-content: space-between | flex-start | flex-end | center | sapce-around | sapce-evenly
+        4)垂直方向布局 align-item 选flex-start    
+        align-items: flex-start | flex-end | center | baseline(文本线) |stretch(填充满)
+        5)多行布局分配 align-content 这不考虑 这儿是单行布局
+        align-content: flex-start | flex-end | center | sapce-between | sapce-around | stretch
+        关键css
+        .rwd-content {display: flex; justify-content: space-between; align-items: flex-start; }
+        自适应布局时设置flex-wrap: wrap;
+    4. grid布局 display: grid
+        网格是一组相交的的水平线和垂直线，它定义了网格的列和行。我们将网格元素放置在与这些行和列相关的位置上
+        采用网格布局的区域称为容器 容器内部采用网格定位的子元素，称为项目（只能是容器顶层子元素）
+        容器里面的水平区域称为行垂直区域称为列
+        行和列交叉区哉称为单元格
+        划分网络的线称为网络线 正常情况下 n行有n+1根水平网络线，m列有m+1根垂直网络线
+        Grid布局属性分成两类。一类是定义在容器上面的，称为容器属性；另一类是定义在项目上面的称为项目属性
+        容器属性：
+            display: grid; 默认情况下容器都是块级元素
+            display: inline-grid; 也可以设置成行内元素
+            设置为网格布局以后，容器子元素（项目）的float、display:inline-block | table-cell 
+            vertical-align column-*等设置都将失效
+            grid-template-columns: 100px 100px 100px | repeat(3, 33.33%);
+            grid-template-rows: 100px 100px 100px | repeat(3, 33.33%); 
+            // 指定了三行三列的网格，列宽和行高都是100px
+            （1）repeat 重复 repeat(2, 100px 20px 80px) 也可以重复多个属性
+            
+            （2）auto-fill 有时，单元素大小是固定的，但是容器的大小不确定。如果希望每一行（或每一列）容纳尽可以多的单元格
+            这里可以用auto-fill自动填充
+            grid-template-columns: repeat(auto-fill, 100px);
+
+            （3）fr 为了方便表示比例关系，网格布局提供了fr关键字（fraction的缩写，意为“片段”）。如果两例的宽度分别为
+            1fr和2fr,就表示后者是前者的两倍
+            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 100px 1fr 2fr; // 第一例为100px固定 第二例是第三例的一半 自动计算
+
+            （4）minmax()函数产生一个长度范围，表示长度就在这个范围之中。接受两个参数，分别为最小值和最大值
+            grid-template-columns: 1fr 1fr minmax(100px 1fr);
+
+            (5)auto 关键字表示由浏览器自已决长度
+            grid-template-columns: 100px auto 100px
+            
+            (6) 网络线名称，方便以后引用
+            grid-template-columns: [c1] 100px [c2] 100px [c3] auto [c4];
+            grid-template-rows: [r1] 100px [r2] 100px [r3] auto [r4]; // 四根线三行
+            也允许同一根线有多个名字 [fifth row-5]
+
+            grid-row-gap属性设置行与行的间隔（行间距）,grid-column-gap属性设置列与列之间的间隔
+            grid-row-gap: 20px; grid-column-gap: 20px; grid-gap: 20px 20px;
+            // 新标准 上面的grid-前缀会删除 row-grap;
+
+            grid-template-areas 指定区域，一个区域由单个或多个单元格组成。
+            grid-template-columns: 100px 100px 100px;
+            grid-template-rows: 100px 100px 100px;
+            grid-template-areas: 'a b c'
+                                'd e f'
+                                'g h i'; // 划分出的9个单元格
+            grid-template-areas: 'a a a'
+                                 'b b b'
+                                 'c c c'; // 多个单元素合并成一个区域
+            grid-template-areas: 'a . c'
+                                 'd . f'
+                                 'g . i'; // 中间一列为点 表示没有用到该单元格，或单元格不属于任何区域
+            
+            grid-auto-flow 决定子元素的填充顺序 先行后列 还是先列后行 //默认是row
+            grid-auto-flow: column;
+            grid-auto-flow: row dense; 先行后列并尽可以紧填满
+            grid-auto-flow: column dense; 先列后行并尽可以填满
+
+            place-items: <align-items> <justify-items>;
+        注意使用IE盒模型 box-sizing: border-box;
+
+URL 资源统一定位符 协议 域名/IP 资源路径 DNS（域名服务器）
+    1输入URL
+    2 查找对应域名对应的IP 
+    3 根据ip与服务器建立联系 
+    4浏览器与服务器通信
+        浏览器请求服务器返回
+        1.加载 浏览器对一个html页面加载顺序是从上而下的
+        浏览器在加载的过程中，同时进行解析、渲染处理
+        在这个过程中，遇到link标签、image标签、script标签时，浏览器会再次向服务器发送请求以获取相应的css文件、图片资源、
+        js文件，并执行js代码，同步进行加载，解析
+        2.解析的过程，其实就是生成dom树（Document Object Model文档对象模型）
+        dom树是由dom元素及属性节点组成的，并且加上css解析的样式对象和js解析的动作实现；
+        渲染就是将dom树进行可视化表示
+        3.浏览器通过渲染，将dom可视化，得到渲染树
+        构建渲染树使页面以正确的顺序绘制出来
+
+
+浏览器渲染
+    1.解析文档构建DOM树
+        HTML/XHTML/SVG：解析这三种文件后，会生成DOM树（DOM Tree）
+        CSS：解析样式表，生成CSS规则树（CSS Rule Tree）
+        JavaScript: 解析脚本，通过DOM API和CSSOM API操作DOM Tree 和 CSS Rule Tree,与用户进行交互
+    2.构建渲染树
+        解析文档完成后，浏览器引擎会将CSS Rule Tree附着到DOM Tree上，并根据DOM Tree和 CSS Rule Tree
+        构造Rendering Tree（渲染树）
+            Render Tree和DOM Tree的区别在，类似于head或display:none之类的东西不会放到渲染树中
+    3.布局与绘制渲染树
+        解析position,overflow,z-index等等属性，计算每一个渲染树节点的位置大小，此过程被称为reflow
+        最后调用操作系统的Native GUI API 完成绘制（repain）
+    脚本和样式文件对页面渲染的影响
+        浏览器从服务器获取文档从上到下进行解析，在脚本文件标签不包含defer和async属性的情况下，会如下规则执行
+            1解析HTML文档，遇到HTML标签时，构建DOM树
+            2在构建DOM的过程中，如果遇到外联样式声明或脚本声明，则暂停文档解析，创建新的网络连接，开始下载样式和脚本文件
+            3样式文件下载完成后，构建CSS Rule DOM,脚本文件下载完成后，解释并立即执行
+            4.构建DOM的同时，结合CSS规则树完成页面渲染
+            5.如果DOM树先于CSS规则树构建，则在CSS树构建完成后，页面会发生一次重绘，将新构建的CSS规则应用于渲染树
+    脚本文件对文档解析的影响
+        脚本文件的下载和执行是与文档解析是同步进行的，脚本文件的下载和执行都会阻塞文档的解析
+        defer 异步加载 在DOMContentLoaded事件和load事件之前执行
+        async 异步加载  加载完就执行
+    CSS渲染对页面渲染的影响
+        页面渲染时会根据DOM结构生成一个DOM树，然后加上CSS样式生成渲染树。如果CSS文件放在<head>标签中，则CSS Rule Tree
+        会先于DOM树完成构建，之后浏览器就可以边构建DOM树边完成渲染；反之，CSS文件放在标签之后，比如<body/>之前，那么当
+        DOM树构建完成了，渲染（CSS Rule）树才构建，浏览器不得不重新渲染整个页面，这样就构成资源的浪费
+    回流和重绘
+        reflow(回流)
+            DOM结构中的各个元素都有自已盒子模型，浏览器根据各样式计算尺寸和位置，构建渲染树的过程称为reflow。
+            当渲染树节点的尺寸，布局，隐藏属性发生改变时，会触发reflow操作，重新构建Render Tree。每个页面在加载第一次
+            时，会发生一次回流
+            完成回流后，浏览器会重新绘制受影响的部分到屏幕中，回流必定重绘
+        repaint(重绘)
+            当各种盒子的位置大小以及其他属性，例如颜色、字体大小等都确定下来后，浏览器便把这些元素都按照各自的特性进行绘制
+            于是页面的内容出现了，这个过程欣称为repaint
+    会确发reflow的操作
+        reflow的成本比Repaint高得多。DOM Tree 里的每个结点都会有reflow方法，一个结点的reflow很有可能导致子结点，甚至
+        父结点以及同级结点重绘
+            增加、删除、修改DOM结点
+            移动DOM位置
+            绘制动画
+            修改CSS样式
+            Resize窗口的时候或是滚动
+            修改网页的默认字体
+    减少reflow
+        不要一条一条地修改DOM的样式。与其这样，还不如预先定义好css的class,然后修改DOM的className,
+        把DOM离线后修改。如：使用documentFragment对象在内存里操作DOM；先把DOM设置为display:none(有一次repaint),
+        然后就可以随便改了，然后在他显示出来
+        克隆一个DOM到内存里，然后随便改，改完后，和在线的进行交换
+        不要有table布局。因为很可能很小的一点改到会造成整个table的重新布局
+    onload事件和DOMContentLoaded事件
+        DOMContentLoaded事件是当初始HTML文档完全被加载和解析时触发。无需要等待样式表，图片，子框架完成加载
+        而onload事件要等页面所有元素，包括图片以及脚本等全部加载完成才触发，因此它比DOMContentLoaded要更晚执行
+
+
+
+
