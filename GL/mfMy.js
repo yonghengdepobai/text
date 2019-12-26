@@ -3,62 +3,229 @@ var round = Math.round, random = Math.random;
 var updateMvpMatrix = function() {
     // this.data.mvpMatrix = new Matrix(this.data.)
 }
-var rotateF = {}
+let rotateF = {}; // 当前进行怎样的旋转
+var rotateA = {}; // 已经进行的旋转
+var rotateDetail = {}; // 记录每一个方块的旋转情况
 function rotateMF(direction, zIndex) {
     // 旋转90度
     var angle = 0; AngleMax = 90;
     var requestId;
-    
+    // rotateA = {[direction + zIndex]: (rotateA[direction + zIndex]) % 3};
     function setCurrentAngle() {
         angle = animate(angle);
         if (angle < AngleMax) {
             requestAnimationFrame(setCurrentAngle);
             // cancelAnimationFrame(requestId);
         } else {
+            // setRotateDetail(direction, zIndex);
+            // console.log(rotateDetail, MFArr);
             setMFarr(direction, zIndex);
+            setRotateDetail(direction, zIndex);
+            console.log(rotateDetail, MFArr);
             rotateF = {};
+            // console.log(rotateF);
+            rotateA[direction + zIndex] = rotateA[direction + zIndex] || 0;
+            rotateA[direction + zIndex] +=1;
+            rotateA[direction + zIndex] = rotateA[direction + zIndex] % 4;
+            return;
         }
         rotateF = {
             direction,
             zIndex,
             currentAngle: angle,
+            isEmp: true,
         }
         
     }
     setCurrentAngle();
     
 }
+function setRotateDetail(direction, zIndex) {
+    switch(direction) {
+        case 'y': setYDetail(zIndex); break;
+        case  'x': setXDetail(zIndex);break;
+        case 'z': setZDetail(zIndex); break;
+        default: break;
+    }
+    function setYDetail(zIndex) {
+        let arr = MFArr.slice(zIndex * 9, (zIndex + 1) * 9);
+        console.log(arr);
+        for (let kk in arr) {
+            let k = arr[kk];
+            rotateDetail[k] = rotateDetail[k] || [];
+            let len = rotateDetail[k].length -1;
+            // if (len > -1 && rotateDetail[k][len].dir == 'y') {
+                // rotateDetail[k][len].num = rotateDetail[k][len].num +1;
+                // rota/teDetail[k][len].num++;
+            // } else {
+                rotateDetail[k].push({num: 1, dir: 'y'});
+            // }
+            
+            // rotateDetail[k] = rotateDetail[k] || {};
+            // rotateDetail[k]['y'] = rotateDetail[k]['y'] || 0;
+            // rotateDetail[k]['y'] = (rotateDetail[k]['y'] + 1) % 4;
+        }
+    }
+    function setXDetail(zIndex) {
+        let arr = [];
+        for (let i = 0; i < 3; i++) {
+            arr[i] = [];
+            for (let j = 0; j < 3; j++) {
+                arr[i][j] = LevelMF[i][j][zIndex];
+            }
+        }
+        console.log(arr);
+        arr = flattenMd(arr);
+        // console.log(arr);
+        for (let kk in arr) {
+            let k = arr[kk];
+            rotateDetail[k] = rotateDetail[k] || [];
+            let len = rotateDetail[k].length -1;
+            // if (len > -1 && rotateDetail[k][len].dir == 'x') {
+                // rotateDetail[k][len].num = rotateDetail[k][len].num +1;
+                // rotateDetail[k][len].num++;
+            // } else {
+                rotateDetail[k].push({num: 1, dir: 'x'});
+            // }
+            // rotateDetail[k] = rotateDetail[k] || {};
+            // rotateDetail[k]['x'] = rotateDetail[k]['x'] || 0;
+            // rotateDetail[k]['x'] = (rotateDetail[k]['x'] + 1) % 4;
+        }
+    }
+    function setZDetail(zCol) {
+        let arr = [], len = 3;
+        for (let i = 0; i < 3; i++) { // 三行
+            arr[i] = LevelMF[i][zCol];
+        }
+        console.log(arr);
+        arr = flattenMd(arr);
+        for (let kk in arr) {
+            let k = arr[kk];
+            rotateDetail[k] = rotateDetail[k] || [];
+            let len = rotateDetail[k].length -1;
+            // if (len > -1 && rotateDetail[k][len].dir == 'z') {
+                // rotateDetail[k][len].num = rotateDetail[k][len].num +1;
+                // rotateDetail[k][len].num++;
+            // } else {
+                rotateDetail[k].push({num: 1, dir: 'z'});
+            // }
+
+            // rotateDetail[k]['z'] = rotateDetail[k]['z'] || 0;
+            // rotateDetail[k]['z'] = (rotateDetail[k]['z'] + 1) % 4;
+        }
+    }
+}
 function setMFarr(direction, zIndex) {
     let ta1 = LevelMF[zIndex];
     switch(direction) {
-        case 'y': LevelMF[zIndex] = setXArr(ta1);break;
+        case 'y': LevelMF[zIndex] = setYArrLeft(ta1);break;
+        case  'x': setXArrDown(zIndex);break;
+        case 'z': setZArrRight(zIndex); break;
         default: break;
     }
     MFArr = flattenMd(LevelMF);
     console.log(MFArr, LevelMF);
 }
-function setXArr(arr) {
-    let ta = [[],[],[]];
+// function setMFarrMatrix(direction, zIndex) {
+//     let ta1 = LevelMF[zIndex];
+//     switch(direction) {
+//         case 'y': LevelMF[zIndex] = setYArrLeft(ta1);break;
+//         case  'x': setXArrDown(zIndex);break;
+//         case 'z': setZArrRight(zIndex); break;
+//         default: break;
+//     }
+//     MFArr = flattenMd(LevelMF);
+//     console.log(MFArr, LevelMF);
+// }
 
-    for(let i = 0; i < arr.length; i++) {
-        for(let j = 0; j < arr[i].length; j++) {
-            ta[j][i] = arr[i][j];
+// function setArrXR(arr) {
+
+// }
+function setZArrRight(zCol) { // 饶Z轴旋转
+    // 得到数组 在旋转
+    let zArr = [];
+    let len = 3;
+    for (let i = 0; i < 3; i++) { // 三行
+        zArr[3 - 1 - i] = LevelMF[i][zCol];
+    }
+    console.log(zArr);
+    zArr = setYArrLeft(zArr);
+    console.log(zArr);
+    for (let i = 0; i < 3; i++) {
+        LevelMF[3 - 1 - i][zCol] = zArr[i];
+    }
+}
+function setXArrDown(zCol) { // 旋转三维数组的列 饶X轴旋转
+    // get XArr
+    let XArr = [], col = 0;
+
+    let start = 0, end = 3;
+    for (let i = start; i < end; i++) {
+        XArr[i] = [];
+        for (let j = start; j < end; j++) {
+            XArr[i][j] = LevelMF[j][i][zCol]
         }
     }
-    // arr = ta;
-    let ta2 = [[], [], []];
-    let temp = ta[0].slice(0);
-    ta2[0] = ta[2]; ta2[1] = ta[1]; ta2[2] = temp;
-    // for(let i = 0; i < arr.length; i++) {
-    //     for(let j = 0; j < arr[i].length; j++) {
-    //         ta2[j][i] = arr[i][j];
-    //     }
-    // }
-    
-    arr = ta2;
-    console.log(ta, ta2, arr);
-    return ta2;
+    console.log(XArr);
+    XArr = TArr(XArr);
+    console.log(XArr);
+    // XArr = setXArrRight(XArr);
+    XArr = setYArrLeft(XArr);
+    console.log(XArr);
+    XArr = TArr(XArr);
+    // XArr = setYArrLeft(XArr);
+    console.log(XArr);
+    for (let i = start; i < end; i++) {
+        for (let j = start; j < end; j++) {
+                // LevelMF[i][j][zCol] = XArr[i - start][j - start];
+                LevelMF[j][i][zCol] = XArr[i][j];
+        }
+    }
+    console.log(LevelMF, XArr);
 }
+function setYArrLeft(arr) { // 向左旋转数组
+    let ta = [[],[],[]];
+    var temp = [];
+    var len = arr.length;
+    for(var i = 0; i < len; i++){
+        for(var j = 0; j < len; j++){
+            var k = len - 1 -j;
+            if(!temp[k]){
+                temp[k] = [];
+            }
+            temp[k][i] = arr[i][j];
+        }
+    }
+   return temp;
+
+}
+function setXArrRight(arr) { // 向右旋转一个二维数组
+    var len = arr.length;
+    var newArr = [[1], [2], [3]];
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < len; j++) {
+            newArr[j][len - 1 - i] = arr[i][j];
+        }
+    }
+    return newArr;
+}
+
+function TArr(arr) { // 数组转置
+    let tarr = [];
+    // 得到最大列数
+    let maxCol = 0;
+    for (let i = 0; i < arr.length; i++) {
+        if (maxCol < arr[i].length) {maxCol = arr[i].length}
+    }
+    // 初始化
+    for (let i = 0; i < maxCol; i++) {tarr[i] = [];
+        for (let j = 0; j < arr.length; j++) {
+            tarr[i][j] = arr[j][i];
+        }
+    }
+    return tarr;
+}
+
 
 function flattenMd(arr){
     var result=[]
@@ -84,13 +251,14 @@ var CUBE_VSHADER_SOURCE = `
     uniform mat4 u_NormalMatrix;
     varying vec4 v_Color;
     void main() {
-        // vec3 lightDirection = vec3(0.0, 0.0, 1.0);
-        vec3 lightDirection = u_lightDirection;
+        vec3 lightDirection = vec3(1.0, 1.0, 1.0);
+        // vec3 lightDirection = vec3(u_lightDirection);
         vec4 lColor = vec4(0.0, 1.0, 1.0, 1.0);
         gl_Position = u_MvpMatrix * a_Position;
         vec3 normal = normalize(vec3(u_NormalMatrix * a_Normal));
+        // vec3 normal = normalize((u_NormlMatrix * a_Normal).xyz);
         float nDotL = max(dot(normal, lightDirection), 0.0);
-        v_Color = vec4(a_Color.rgb * nDotL, a_Color.a);
+        v_Color = vec4((a_Color.rgb * nDotL + vec3(0.1)) , a_Color.a);
     }
 `;
 var CUBE_FSHADER_SOURCE = `
@@ -130,18 +298,18 @@ function main() {
 
     var viewProjMatrix = new Matrix4();
     viewProjMatrix.setPerspective(30, canvas.width / canvas.height, 1.0, 100); // Perspective 透视图
-    viewProjMatrix.lookAt(0, 20, 20, 0, 0, 0, 0, 1, 0); // 视点 ，注视点， 上方向
-    console.log(cubeProgram.u_lightDirection);
-    var lightDirection = new Vector3([0, 0, 1]);
-    // lightDirection.normalize(); // 归一化
-    console.log(lightDirection.elements);
+    viewProjMatrix.lookAt(9, 20, 20, 0, 0, 0, 0, 1, 0); // 视点 ，注视点， 上方向
+    // console.log(cubeProgram.u_lightDirection);
+    var lightDirection = new Vector3([1, 1, 1]);
+    lightDirection.normalize(); // 归一化
+    // console.log(lightDirection.elements);
     gl.enable(gl.DEPTH_TEST);
     gl.clearColor(0, 0, 0, 1);
     var currentAngle = 30;
     var tick = function() {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         currentAngle = animate(currentAngle);
-        setDraw(gl, cubeProgram, cube, viewProjMatrix, currentAngle, rotateF || {});
+        setDraw(gl, cubeProgram, cube, viewProjMatrix, currentAngle);
         requestAnimationFrame(tick, canvas);
         // tick();
     };
@@ -156,23 +324,27 @@ var MFArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,17,18,19,2
 var LevelMF = [
     [[0, 1, 2], [3, 4, 5], [6, 7, 8]],
     [[9, 10, 11], [12, 13, 14], [15, 16, 17]],
-    [[18, 19, 20], [21, 22, 23], 24]
+    [[18, 19, 20], [21, 22, 23], [24, 25, 26]]
 ]
-function setDraw(gl, program, cube, viewProjMatrix, currentAngle, rotateF) { //  用小方块组成大方块
+function setDraw(gl, program, cube, viewProjMatrix, currentAngle) { //  用小方块组成大方块
     var p = 0.2;
-    
+    // console.log(MFArr);
+    // [2, 5, 8, 1, 4, 7, 6, 15, 24, 3, 10, 11, 12, 13, 14, 21, 16, 17, 0, 19, 20, 9, 22, 23, 18, 25, 26]
     for(let i = 0; i < 27; i++) {
-        var x = (i % 3) * 2, y = Math.floor(i / 9) * 2, z = (Math.floor(i / 3) % 3) * 2;
+        // var coord = MFArr[i];
+        var coord = i;
+        var x = (coord % 3) * 2, y = Math.floor(coord / 9) * 2, z = (Math.floor(coord / 3) % 3) * 2;
         // var x1 = x + (p * x), y1 = y + p * y, z1 = z + p * z;
         var x1 = x, y1 = y, z1 = z;
         // console.log(i, x, y, z);
         g_modelMatrix.setTranslate(x1, y1, z1);
         g_modelMatrix.translate(-3, -3, -3);
-        drawCube(gl, program, cube, viewProjMatrix, currentAngle, MFArr[i], rotateF);
+        // drawCube(gl, program, cube, viewProjMatrix, currentAngle, MFArr[i], i);
+        drawCube(gl, program, cube, viewProjMatrix, currentAngle, i, MFArr[i]);
     }
 }
 var oldcurrentAngle = 0;
-function drawCube(gl, program, cube, viewProjMatrix, currentAngle, index, rotateF) {
+function drawCube(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex) {
     gl.useProgram(program);
     initAttributeVariable(gl, program.a_Position, cube.vertexBuffer);
     initAttributeVariable(gl, program.a_Color, cube.colorBuffer);
@@ -180,24 +352,92 @@ function drawCube(gl, program, cube, viewProjMatrix, currentAngle, index, rotate
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cube.indexBuffer);
 
+    
+    // if (!rotateF.isEmp) {
+        let x0Arr = [0, 3, 6, 9, 12, 15, 18, 21, 24], x1Arr = [1, 4, 7, 10, 13, 16, 19, 22, 25];
+        let x2Arr = [2, 5, 8, 11, 14, 17, 20, 23, 26];
+        let z0Arr = [0, 1, 2, 9, 10, 11, 18, 19, 20], z1Arr = [3, 4, 5, 12, 13, 14, 21, 22, 23];
+        let z2Arr = [6, 7, 8, 15, 16, 17, 24, 25, 26];
 
+        // setCubeRotate(index, MIdex);
+        // drawCanvase(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex);
+        // for (let k in rotateA) {
+            // console.log(k);
+            // switch(k) {
+            //     case 'y0': if (index < 9) {g_modelMatrix.rotate(rotateA[k] * 90, 0, 1, 0);} break;
+            //     case 'y1': if (index < 18 && index > 8){g_modelMatrix.rotate(rotateA[k] * 90, 0, 1, 0);} break;
+            //     case 'y2': if (index > 17) {g_modelMatrix.rotate(rotateA[k] * 90, 0, 1, 0);} break;
+            //     case 'x0': if (x0Arr.indexOf(index) > -1) {
+            //                     g_modelMatrix.rotate(rotateA[k] * 90, 1, 0, 0);} break;
+            //     case 'x1': if (x1Arr.indexOf(index) > -1) {
+            //                     g_modelMatrix.rotate(rotateA[k] * 90, 1, 0, 0);} break;
+            //     case 'x2': if (x2Arr.indexOf(index) > -1) {
+            //                     g_modelMatrix.rotate(rotateA[k] * 90, 1, 0, 0);} break;
+            //     case 'z0': if (z0Arr.indexOf(index) > -1) {
+            //                     g_modelMatrix.rotate(rotateA[k] * 90, 0, 0, 1);} break;
+            //     case 'z1': if (z1Arr.indexOf(index) > -1) {
+            //                     g_modelMatrix.rotate(rotateA[k] * 90, 0, 0, 1);} break;
+            //     case 'z2': if (z2Arr.indexOf(index) > -1) {
+            //                     g_modelMatrix.rotate(rotateA[k] * 90, 0, 0, 1);} break;
+            // }
+            // // switch(k) {
+            // //     case 'y0': if (MIdex < 9) {g_modelMatrix.rotate(rotateA[k] * 90, 0, 1, 0);} break;
+            // //     case 'y1': if (MIdex < 18 && MIdex > 8){g_modelMatrix.rotate(rotateA[k] * 90, 0, 1, 0);} break;
+            // //     case 'y2': if (MIdex > 17) {g_modelMatrix.rotate(rotateA[k] * 90, 0, 1, 0);} break;
+            // //     case 'x0': if (x0Arr.indexOf(MIdex) > -1) {
+            // //                     g_modelMatrix.rotate(rotateA[k] * 90, 1, 0, 0);} break;
+            // //     case 'x1': if (x1Arr.indexOf(MIdex) > -1) {
+            // //                     g_modelMatrix.rotate(rotateA[k] * 90, 1, 0, 0);} break;
+            // //     case 'x2': if (x2Arr.indexOf(MIdex) > -1) {
+            // //                     g_modelMatrix.rotate(rotateA[k] * 90, 1, 0, 0);} break;
+            // //     case 'z0': if (z0Arr.indexOf(MIdex) > -1) {
+            // //                     g_modelMatrix.rotate(rotateA[k] * 90, 0, 0, 1);} break;
+            // //     case 'z1': if (z1Arr.indexOf(MIdex) > -1) {
+            // //                     g_modelMatrix.rotate(rotateA[k] * 90, 0, 0, 1);} break;
+            // //     case 'z2': if (z2Arr.indexOf(MIdex) > -1) {
+            // //                     g_modelMatrix.rotate(rotateA[k] * 90, 0, 0, 1);} break;
+            // // }
+        // }
+    // }
+   
+    // setXRotate(3, currentAngle ,index, MIdex);
+    // setYRotate(3, currentAngle ,index, MIdex);
+    // setZRotate(3, currentAngle ,index, MIdex);
+    // setZRotate(3, 90 ,index, MIdex);
+    // setYRotate(3, -90 ,index, MIdex);
+    // setXRotate(3, 90 ,index, MIdex);
+    // setZRotate(3, 90 ,index, MIdex);
+    // let arrNew = [{dir: 0, key: true}, {dir: 1, key: true}, {dir: 2, key: true}];
+    // for (let i = 0; i < allTT.length; i++) {
+    //     setCoord(arrNew);
+    // }
+    
     if (rotateF.direction) {
         // console.log(rotateF);
         switch(rotateF.direction) {
             case 'x':
-                setXRotate(rotateF.zIndex - 0, rotateF.currentAngle, index);
+                setXRotate(rotateF.zIndex - 0, rotateF.currentAngle, index, MIdex);
             break;
             case 'y':
-                setYRotate(rotateF.zIndex - 0, rotateF.currentAngle, index);
+                setYRotate(rotateF.zIndex - 0, rotateF.currentAngle, index, MIdex);
             break;
             case 'z':
-                setZRotate(rotateF.zIndex - 0, rotateF.currentAngle, index);
+                setZRotate(rotateF.zIndex - 0, rotateF.currentAngle, index, MIdex);
             break;
                 default: break;
         }
+        // drawCanvase(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex);
     }
+    // setXRotate(3, currentAngle ,index, MIdex);
+    setCubeRotate(index, MIdex);
+
+    drawCanvase(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex);
     
     
+    
+}
+
+function drawCanvase(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex) {
     g_normalMatrix.setInverseOf(g_modelMatrix);
     g_normalMatrix.transpose();
     gl.uniformMatrix4fv(program.u_NormalMatrix, false, g_normalMatrix.elements);
@@ -209,6 +449,163 @@ function drawCube(gl, program, cube, viewProjMatrix, currentAngle, index, rotate
 
     gl.drawElements(gl.TRIANGLES, cube.numIndex, cube.indexBuffer.type, 0);
 }
+
+function setCubeRotate(zIndex, MIdex) { // 设置各个方块的朝向
+
+    let coord = null;
+    let rDir = {x: 'x', y: 'y', z: 'z'};
+    let arrNew = [{dir: 0, key: true}, {dir: 1, key: true}, {dir: 2, key: true}];
+    // {z:1, x:1}
+    for (let keyw in rotateDetail[MIdex]) {
+        let obj = ['x', 'y', 'z'];
+        let obj2 = {x: 0, y: 1, z: 2};
+        let key = rotateDetail[MIdex][keyw].dir;
+        let keyNum = rotateDetail[MIdex][keyw].num;
+        let angle = keyNum * 90;
+        let cd = rDir[key]; coord = cd;
+        // if (cd.indexOf('-') > -1) {coord = cd.substring(1); angle = -angle;}
+        // if (rotateDetail[MIdex] && rotateDetail[MIdex].length > 1 && keyw > 0 && MIdex == 26) {
+        //     // coord = 'y'; angle = -90;
+        //     console.log(coord);}
+        let rotate = arrNew[obj2[key]];
+        if (!rotate.key) {angle = -angle}
+        switch(obj[rotate.dir]) {
+            case 'x':  g_modelMatrix.rotate(angle, 1, 0, 0); break;
+            case 'y':  g_modelMatrix.rotate(angle, 0, 1, 0); break;
+            case 'z':  g_modelMatrix.rotate(angle, 0, 0, 1); break;
+            case '-x':  g_modelMatrix.rotate(-angle, 1, 0, 0); break;
+            case '-y':  g_modelMatrix.rotate(-angle, 0, 1, 0); break;
+            case '-z':  g_modelMatrix.rotate(-angle, 0, 0, 1); break;
+            default: break;
+        }
+        // if (rotateDetail[MIdex][keyw -1] && rotateDetail[MIdex][keyw] == rotateDetail[MIdex][keyw -1]) {
+        //     console.log(rotateDetail[MIdex]);
+        // } else {
+            rDir = getDir(keyNum, coord);
+            arrNew = setCoord(arrNew, key, keyNum);
+            // console.log(arrNew);
+        // }
+    }
+    function setCoord(arr, coord, num, dir = 1) { // coord 当前所饶之轴, dir 顺逆时针, num 轴动多少
+        // x => 0, y => 1, z => 2
+        // dir 两个方向 另外两个 1 -1
+        // x -x y -y z -z
+        // let x = ang % 4
+        // 0, 1 变更轴（两轴交换）, 2 轴换向, 3 变更轴 
+        // 先默认顺时针
+        let obj = {x: 0, y: 1, z: 2};
+        let c = obj[coord];
+        for (let i = 0; i < arr.length; i++) {
+            if (i != c) {
+                if (dir == 1) {
+                    if (arr[c].key) {
+                        arr[i].dir = (arr[i].dir - num + 3) % 3;
+                    } else {
+                        arr[i].dir = (arr[i].dir + num + 3) % 3;
+                    }
+                    
+                }
+            }
+        }
+        for (let i = 0; i <arr.length; i++) {
+            if (i != c) {
+                if (arr[i].dir == arr[c].dir) {
+                    arr[i].key = !arr[i].key;
+                    // console.log(i, c)
+                    arr[i].dir = 3 - arr[3 - i - c].dir - arr[c].dir;
+                }
+            }
+        }
+        return arr;
+    }
+
+    // 找到变化后对应的转轴
+    function getDir(num, dir) {
+        // console.log(num, dir);
+        let rDir = {x: 'x', y: 'y', z: 'z'};
+        if (num == 3) { // 90 逆时针
+            switch(dir) {
+                case 'x': rDir = {x: 'x',y: 'z', z: '-y'}; break;
+                case '-x': rDir = {x: '-y',y: '-x', z: 'y'}; break;
+                case 'y': rDir = {y: 'y',z: 'x', x: '-z'}; break;
+                case '-y': rDir = {y: '-x',z: '-y', x: 'z'}; break;
+                case 'z': rDir = {z: 'z',x: 'y', y: '-x'}; break;
+                case '-z': rDir = {z: '-y',x: '-z', y: 'x'}; break;
+                default: break;
+            }
+        }
+        if (num == 1) { // -90 逆时针
+            switch(dir) {
+                case 'x': rDir = {x: 'x',y: '-z', z: 'y'}; break;
+                case '-x': rDir = {x: '-y',y: 'z', z: '-x'}; break;
+                case 'y': rDir = {y: 'y',z: '-x', x: 'z'}; break;
+                case '-y': rDir = {y: '-z',z: 'x', x: '-y'}; break;
+                case 'z': rDir = {z: 'z',x: '-y', y: 'x'}; break;
+                case '-z': rDir = {z: '-x',x: 'y', y: '-z'}; break;
+                default: break;
+            }
+        }
+        if (num == 2) { // -90 逆时针
+            switch(dir) {
+                case 'x': rDir = {x: 'x',y: '-y', z: '-z'}; break;
+                case '-x': rDir = {x: '-x',y: '-y', z: '-x'}; break;
+                case 'y': rDir = {y: 'y',z: '-z', x: '-x'}; break;
+                case '-y': rDir = {y: '-y',z: '-z', x: '-y'}; break;
+                case 'z': rDir = {z: 'z',x: '-x', y: '-y'}; break;
+                case '-z': rDir = {z: '-z',x: '-x', y: '-y'}; break;
+                default: break;
+            }
+        }
+        return rDir;
+    }
+    // x ->y
+    // x coord = null => coord = x => 旋转 => {x: 'x',y: '-z', z: 'y'}
+    // y coord = x => coord = -z => 旋转 => {}
+    // z -> x -> z  => z -y x
+    // z coord = null => coord = z => 旋转 => {z: 'z',x: '-y', y: 'x'}
+    // x coord = z => coord = -y => 旋转 => {z: x}
+    // z coord = -y => coord => x
+    // let keys = Object.keys(rotateDetail[MIdex]);
+    // if (keys.indexOf('z')) {
+    //     let angle = (rotateDetail[MIdex]['z'] || 0) * 90;
+    //     g_modelMatrix.rotate(angle, 0, 0, 1);
+    // }
+    // if (keys.indexOf('y')) {
+    //     let angle = (rotateDetail[MIdex]['y'] || 0) * 90;
+    //     g_modelMatrix.rotate(angle, 0, 1, 0);
+    // }
+    // if (keys.indexOf('x')) {
+    //     let angle = (rotateDetail[MIdex]['x'] || 0) * 90;
+    //     g_modelMatrix.rotate(angle, 0, 1, 0);
+    // }
+}
+function setCoord(arr, coord, num, dir = 1) { // coord 当前所饶之轴, dir 顺逆时针, num 轴动多少
+    // x => 0, y => 1, z => 2
+    // dir 两个方向 另外两个 1 -1
+    // x -x y -y z -z
+    // let x = ang % 4
+    // 0, 1 变更轴（两轴交换）, 2 轴换向, 3 变更轴 
+    // 先默认顺时针
+    let obj = {x: 0, y: 1, z: 2};
+    let c = obj[coord];
+    for (let i = 0; i < arr.length; i++) {
+        if (i != c) {
+            if (dir == 1) {
+                arr[i].dir = (arr[i].dir - num + 3) % 3;
+            }
+        }
+    }
+    for (let i = 0; i <arr.length; i++) {
+        if (i != c) {
+            if (arr[i].dir == arr[c].dir) {
+                arr[i].key = !arr[i].key;
+                // console.log(i, c)
+                arr[i].dir = 3 - arr[3 - i - c].dir - arr[c].dir;
+            }
+        }
+    }
+    return arr;
+} 
 
 function setZRotate(zI, currentAngle, index) { // 饶Z轴转动
     rotateArr = [[0, 1, 2, 9, 10, 11, 18, 19, 20],
@@ -226,6 +623,13 @@ function setZRotate(zI, currentAngle, index) { // 饶Z轴转动
     } else {
         snum = [...rotateArr[0], ...rotateArr[1], ...rotateArr[2]].indexOf(index) % 9;
     }
+    // let Rarr = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+    // let oldAng = rotateA['z' + zI] || 0;
+    // for (let i = 0; i < oldAng; i++) {
+    //     // Rarr = setYArrLeft(Rarr);
+    //     Rarr = setXArrRight(Rarr);
+    // }
+    // Rarr = flattenMd(Rarr);
     switch(snum) {
 
         case 0:initAng = -135;break; // 一
@@ -256,12 +660,13 @@ function setZRotate(zI, currentAngle, index) { // 饶Z轴转动
             
     }
 }
-function setXRotate(zI, currentAngle, index) { // 饶X轴转动
-    // 传入的index会不一样 从左到右列一个数组
+function setXRotate(zI, currentAngle, index, MIdex) { // 饶X轴转动
+    // 传入的zI会不一样 从左到右列一个数组
     rotateArr = [[0, 3, 6, 9, 12, 15, 18, 21, 24],
      [1, 4, 7, 10, 13, 16, 19, 22, 25], [2, 5, 8, 11, 14, 17, 20, 23, 26]];
     oldcurrentAngle = currentAngle;
     let aindex = index;
+    // let aindex = MIdex;
     let r = 2 * Math.sqrt(2);
     let arr = [3, 4, 5, 9, 10, 11, 15, 16, 17, 21, 22, 23];
     if (arr.indexOf(aindex) > -1) {r = 2};
@@ -270,6 +675,16 @@ function setXRotate(zI, currentAngle, index) { // 饶X轴转动
     let initAng = 0;
     let snum = index;
         snum = Math.floor(index / 3);
+    let Rarr = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+    let oldAng = rotateA['x' + zI] || 0;
+    // for (let i = 0; i < oldAng; i++) {
+    //     Rarr = setYArrLeft(Rarr);
+    // }
+    // Rarr = flattenMd(Rarr);
+
+    // [6, 1, 2] // 先设置坐标 在旋转 在设置坐标在旋转
+    // [15, 4, 5]
+    // [24, 7, 8]
     switch(snum) {
         case 0:initAng = 45;break;
         case 1:initAng = 90;break;
@@ -298,7 +713,8 @@ function setXRotate(zI, currentAngle, index) { // 饶X轴转动
     }
 }
 function setYRotate(zI, currentAngle, index) { // 饶Y轴转动
-    oldcurrentAngle = currentAngle;
+    // oldcurrentAngle = currentAngle;
+    // console.log(MFArr);
     let aindex = index % 9;
     let r = 2 * Math.sqrt(2);
     let arr = [1, 3, 5, 7];
@@ -306,6 +722,14 @@ function setYRotate(zI, currentAngle, index) { // 饶Y轴转动
     if (aindex == 4) {r = 0};
     let zindex = Math.floor(index / 9);
     let initAng = 0;
+    let Rarr = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+    let oldAng = rotateA['y' + zI] || 0;
+    // for (let i = 0; i < oldAng; i++) {
+    //     Rarr = setYArrLeft(Rarr);
+    // }
+    // Rarr = flattenMd(Rarr);
+    // // console.log(Rarr);
+    // let aind = MFArr.indexOf(index) % 9;
     switch(aindex) {
         case 0:initAng = 45;break;
         case 1:initAng = 90;break;
@@ -332,7 +756,7 @@ function setYRotate(zI, currentAngle, index) { // 饶Y轴转动
 }
 
 
-function setCube(gl) {
+function setCube(gl) { // 建立模型
     var i, j, k, p, n, position = [], normal, color = [];
     var a = 1, b = 0.9, ctab = [[1, 1, 0], [0, 0, 1], [1, 0, 0], [1, 1, 1], [0, 1, 0], [1, 0.5, 0] ];
     var point = {
@@ -417,16 +841,16 @@ var normal = [];
     o.colorBuffer = initArrayBufferForLaterUse(gl, colorVertex, 3, gl.FLOAT);
     o.normalBuffer = initArrayBufferForLaterUse(gl, normalV, 3, gl.FLOAT);
     o.indexBuffer = initElementArrayBufferForLateUse(gl, indexV, gl.UNSIGNED_BYTE);
-    console.log(vertiersV);
-    console.log(colorVertex);
-    console.log(normalV);
-    console.log(indexV);
+    // console.log(vertiersV);
+    // console.log(colorVertex);
+    // console.log(normalV);
+    // console.log(indexV);
 
     o.numIndex = indexV.length;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-    console.log(o);
+    // console.log(o);
     return o;
 }
 
@@ -454,7 +878,7 @@ function initAttributeVariable(gl, attribute, buffer) {
     gl.vertexAttribPointer(attribute, buffer.num, buffer.type, false, 0, 0);
     gl.enableVertexAttribArray(attribute);
 }
-var ANGLE_STEP = 30;
+var ANGLE_STEP = 60;
 var last = Date.now(); 
 function animate(angle) {
     var now = Date.now();
