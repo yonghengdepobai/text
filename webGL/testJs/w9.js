@@ -362,6 +362,26 @@ var index = new Uint8Array([
      var lastX = -1; lastY = -1;
 
      canvas.onmousedown = function(ev) {
+<<<<<<< HEAD
+            var x = ev.clientX, y = ev.clientY;
+            var rect = ev.target.getBoundingClientRect();
+            //  console.log(rect, x, y);
+            if (rect.left <= x && x < rect.right && rect.top <=y && y < rect.bottom) {
+                lastX = x; lastY = y;
+                dragging = true;
+
+                //  console.log(rect, y);
+                var x_in_canvas = x - rect.left, y_in_canvas = rect.bottom - y;
+                var picked = check(gl, n, x_in_canvas, y_in_canvas, currentAngle,
+                u_Clicked, viewProjMatrix, u_MvpMatrix, u_PickedFace);
+
+                console.log(picked);
+                gl.uniform1i(u_PickedFace, picked);
+                draw(gl, n, viewProjMatrix, u_MvpMatrix, currentAngle);
+                // if (picked) { console.log('clicked!!!!')};
+
+            }
+=======
          var x = ev.clientX, y = ev.clientY;
          var rect = ev.target.getBoundingClientRect();
         //  console.log(rect, x, y);
@@ -380,6 +400,7 @@ var index = new Uint8Array([
             // if (picked) { console.log('clicked!!!!')};
 
          }
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
      }
 
      canvas.onmouseup = function(ev) {dragging = false};

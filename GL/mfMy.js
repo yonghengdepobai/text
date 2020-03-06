@@ -6,6 +6,46 @@ var updateMvpMatrix = function() {
 let rotateF = {}; // 当前进行怎样的旋转
 var rotateA = {}; // 已经进行的旋转
 var rotateDetail = {}; // 记录每一个方块的旋转情况
+<<<<<<< HEAD
+var rotateAll = {x: 0, y: 0};
+var rotateIsOver = true;
+function rotateMF(direction, zIndex) {
+    // 旋转90度
+    if (rotateIsOver) {
+        rotateIsOver = false;
+        var angle = 0; AngleMax = 90;
+        var requestId;
+        // rotateA = {[direction + zIndex]: (rotateA[direction + zIndex]) % 3};
+        function setCurrentAngle() {
+            angle = animate(angle);
+            if (angle < AngleMax) {
+                requestAnimationFrame(setCurrentAngle);
+                // cancelAnimationFrame(requestId);
+            } else {
+                // setRotateDetail(direction, zIndex);
+                // console.log(rotateDetail, MFArr);
+                setMFarr(direction, zIndex);
+                setRotateDetail(direction, zIndex);
+                console.log(rotateDetail, MFArr);
+                rotateF = {};
+                // console.log(rotateF);
+                rotateA[direction + zIndex] = rotateA[direction + zIndex] || 0;
+                rotateA[direction + zIndex] +=1;
+                rotateA[direction + zIndex] = rotateA[direction + zIndex] % 4;
+                rotateIsOver = true;
+                return;
+            }
+            rotateF = {
+                direction,
+                zIndex,
+                currentAngle: angle,
+                isEmp: true,
+            }
+            
+        }
+        setCurrentAngle();
+    }
+=======
 function rotateMF(direction, zIndex) {
     // 旋转90度
     var angle = 0; AngleMax = 90;
@@ -39,15 +79,25 @@ function rotateMF(direction, zIndex) {
     }
     setCurrentAngle();
     
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 }
 function setRotateDetail(direction, zIndex) {
     switch(direction) {
         case 'y': setYDetail(zIndex); break;
         case  'x': setXDetail(zIndex);break;
         case 'z': setZDetail(zIndex); break;
+<<<<<<< HEAD
+        case '-y': setYDetail(zIndex, -1); break;
+        case  '-x': setXDetail(zIndex, -1);break;
+        case '-z': setZDetail(zIndex, -1); break;
+        default: break;
+    }
+    function setYDetail(zIndex, num = 1) {
+=======
         default: break;
     }
     function setYDetail(zIndex) {
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
         let arr = MFArr.slice(zIndex * 9, (zIndex + 1) * 9);
         console.log(arr);
         for (let kk in arr) {
@@ -58,7 +108,11 @@ function setRotateDetail(direction, zIndex) {
                 // rotateDetail[k][len].num = rotateDetail[k][len].num +1;
                 // rota/teDetail[k][len].num++;
             // } else {
+<<<<<<< HEAD
+                rotateDetail[k].push({num: num, dir: 'y'});
+=======
                 rotateDetail[k].push({num: 1, dir: 'y'});
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
             // }
             
             // rotateDetail[k] = rotateDetail[k] || {};
@@ -66,7 +120,11 @@ function setRotateDetail(direction, zIndex) {
             // rotateDetail[k]['y'] = (rotateDetail[k]['y'] + 1) % 4;
         }
     }
+<<<<<<< HEAD
+    function setXDetail(zIndex, num = 1) {
+=======
     function setXDetail(zIndex) {
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
         let arr = [];
         for (let i = 0; i < 3; i++) {
             arr[i] = [];
@@ -85,14 +143,22 @@ function setRotateDetail(direction, zIndex) {
                 // rotateDetail[k][len].num = rotateDetail[k][len].num +1;
                 // rotateDetail[k][len].num++;
             // } else {
+<<<<<<< HEAD
+                rotateDetail[k].push({num: num, dir: 'x'});
+=======
                 rotateDetail[k].push({num: 1, dir: 'x'});
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
             // }
             // rotateDetail[k] = rotateDetail[k] || {};
             // rotateDetail[k]['x'] = rotateDetail[k]['x'] || 0;
             // rotateDetail[k]['x'] = (rotateDetail[k]['x'] + 1) % 4;
         }
     }
+<<<<<<< HEAD
+    function setZDetail(zCol, num = 1) {
+=======
     function setZDetail(zCol) {
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
         let arr = [], len = 3;
         for (let i = 0; i < 3; i++) { // 三行
             arr[i] = LevelMF[i][zCol];
@@ -107,7 +173,11 @@ function setRotateDetail(direction, zIndex) {
                 // rotateDetail[k][len].num = rotateDetail[k][len].num +1;
                 // rotateDetail[k][len].num++;
             // } else {
+<<<<<<< HEAD
+                rotateDetail[k].push({num: num, dir: 'z'});
+=======
                 rotateDetail[k].push({num: 1, dir: 'z'});
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
             // }
 
             // rotateDetail[k]['z'] = rotateDetail[k]['z'] || 0;
@@ -121,11 +191,19 @@ function setMFarr(direction, zIndex) {
         case 'y': LevelMF[zIndex] = setYArrLeft(ta1);break;
         case  'x': setXArrDown(zIndex);break;
         case 'z': setZArrRight(zIndex); break;
+<<<<<<< HEAD
+        case '-y': LevelMF[zIndex] = setXArrRight(ta1);break;
+        case  '-x': setXArrUp(zIndex);break;
+        case '-z': setZArrLeft(zIndex); break;
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
         default: break;
     }
     MFArr = flattenMd(LevelMF);
     console.log(MFArr, LevelMF);
 }
+<<<<<<< HEAD
+=======
 // function setMFarrMatrix(direction, zIndex) {
 //     let ta1 = LevelMF[zIndex];
 //     switch(direction) {
@@ -141,6 +219,7 @@ function setMFarr(direction, zIndex) {
 // function setArrXR(arr) {
 
 // }
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 function setZArrRight(zCol) { // 饶Z轴旋转
     // 得到数组 在旋转
     let zArr = [];
@@ -148,9 +227,24 @@ function setZArrRight(zCol) { // 饶Z轴旋转
     for (let i = 0; i < 3; i++) { // 三行
         zArr[3 - 1 - i] = LevelMF[i][zCol];
     }
+<<<<<<< HEAD
+    zArr = setYArrLeft(zArr);
+    for (let i = 0; i < 3; i++) {
+        LevelMF[3 - 1 - i][zCol] = zArr[i];
+    }
+}
+function setZArrLeft(zCol) {
+    let zArr = [];
+    let len = 3;
+    for (let i = 0; i < 3; i++) { // 三行
+        zArr[3 - 1 - i] = LevelMF[i][zCol];
+    }
+    zArr = setXArrRight(zArr);
+=======
     console.log(zArr);
     zArr = setYArrLeft(zArr);
     console.log(zArr);
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
     for (let i = 0; i < 3; i++) {
         LevelMF[3 - 1 - i][zCol] = zArr[i];
     }
@@ -166,6 +260,13 @@ function setXArrDown(zCol) { // 旋转三维数组的列 饶X轴旋转
             XArr[i][j] = LevelMF[j][i][zCol]
         }
     }
+<<<<<<< HEAD
+    XArr = TArr(XArr);
+    // XArr = setXArrRight(XArr);
+    XArr = setYArrLeft(XArr);
+    XArr = TArr(XArr);
+    // XArr = setYArrLeft(XArr);
+=======
     console.log(XArr);
     XArr = TArr(XArr);
     console.log(XArr);
@@ -175,13 +276,35 @@ function setXArrDown(zCol) { // 旋转三维数组的列 饶X轴旋转
     XArr = TArr(XArr);
     // XArr = setYArrLeft(XArr);
     console.log(XArr);
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
     for (let i = start; i < end; i++) {
         for (let j = start; j < end; j++) {
                 // LevelMF[i][j][zCol] = XArr[i - start][j - start];
                 LevelMF[j][i][zCol] = XArr[i][j];
         }
     }
+<<<<<<< HEAD
+}
+function setXArrUp(zCol) {
+    let XArr = [], col = 0;
+    let start = 0, end = 3;
+    for (let i = start; i < end; i++) {
+        XArr[i] = [];
+        for (let j = start; j < end; j++) {
+            XArr[i][j] = LevelMF[j][i][zCol]
+        }
+    }
+    XArr = TArr(XArr);
+    XArr = setXArrRight(XArr);
+    XArr = TArr(XArr);
+    for (let i = start; i < end; i++) {
+        for (let j = start; j < end; j++) {
+                LevelMF[j][i][zCol] = XArr[i][j];
+        }
+    }
+=======
     console.log(LevelMF, XArr);
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 }
 function setYArrLeft(arr) { // 向左旋转数组
     let ta = [[],[],[]];
@@ -246,18 +369,33 @@ var CUBE_VSHADER_SOURCE = `
     attribute vec4 a_Position;
     attribute vec4 a_Normal;
     attribute vec4 a_Color;
+<<<<<<< HEAD
+    uniform mat4 u_MvpMatrixFromLight; // 顶点基于光源的模型投影矩阵
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
     uniform mat4 u_MvpMatrix;
     uniform vec3 u_lightDirection;
     uniform mat4 u_NormalMatrix;
     varying vec4 v_Color;
+<<<<<<< HEAD
+    varying vec4 v_PositionFromLight; // 将基于光源的顶点位置传递给片元着色器
+    void main() {
+        vec3 lightDirection = vec3(1.0, 1.0, 1.0);
+        // vec3 lightDirection = vec3(u_lightDirection);
+=======
     void main() {
         vec3 lightDirection = vec3(1.0, 1.0, 1.0);
         // vec3 lightDirection = vec3(u_lightDirection);
         vec4 lColor = vec4(0.0, 1.0, 1.0, 1.0);
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
         gl_Position = u_MvpMatrix * a_Position;
         vec3 normal = normalize(vec3(u_NormalMatrix * a_Normal));
         // vec3 normal = normalize((u_NormlMatrix * a_Normal).xyz);
         float nDotL = max(dot(normal, lightDirection), 0.0);
+<<<<<<< HEAD
+        v_PositionFromLight = u_MvpMatrixFromLight * a_Position;
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
         v_Color = vec4((a_Color.rgb * nDotL + vec3(0.1)) , a_Color.a);
     }
 `;
@@ -265,12 +403,104 @@ var CUBE_FSHADER_SOURCE = `
     #ifdef GL_ES
     precision mediump float;
     #endif
+<<<<<<< HEAD
+    uniform sampler2D u_ShadowMap; // 纹理的存储变量
+    varying vec4 v_Color;
+    varying vec4 v_PositionFromLight;
+    float unpackDepth(const in vec4 rgbaDepth) {
+      const vec4 bitShift = vec4(1.0, 1.0 / 256.0, 1.0 / (256.0 * 256.0), 1.0 / (256.0 * 256.0 * 256.0));
+      float depth = dot(rgbaDepth, bitShift);
+      return depth;
+    }
+    void main() {
+        vec3 shadowCoord = (v_PositionFromLight.xyz / v_PositionFromLight.w) / 2.0 + 0.5;
+        vec4 rgbaDepth = texture2D(u_ShadowMap, shadowCoord.xy);
+        float depth = unpackDepth(rgbaDepth);
+        float visibility = (shadowCoord.z > depth + 0.0015) ? 0.7 : 1.0;
+        gl_FragColor = vec4(v_Color.rgb * visibility, v_Color.a);
+        // gl_FragColor = v_Color;
+    }
+`;
+var OBJ_VSHADER_SOURCE = `
+    attribute vec4 a_Position;
+    attribute vec4 a_Normal;
+    attribute vec4 a_Color;
+    uniform mat4 u_MvpMatrixFromLight; // 顶点基于光源的模型投影矩阵
+    uniform mat4 u_MvpMatrix;
+    uniform vec3 u_lightDirection;
+    uniform mat4 u_NormalMatrix;
+    varying vec4 v_Color;
+    varying vec4 v_PositionFromLight; // 将基于光源的顶点位置传递给片元着色器
+    void main() {
+        vec3 lightDirection = vec3(1.0, 1.0, 1.0);
+        // vec3 lightDirection = vec3(u_lightDirection);
+        gl_Position = u_MvpMatrix * a_Position;
+        vec3 normal = normalize(vec3(u_NormalMatrix * a_Normal));
+        // vec3 normal = normalize((u_NormlMatrix * a_Normal).xyz);
+        float nDotL = max(dot(normal, lightDirection), 0.0);
+        v_PositionFromLight = u_MvpMatrixFromLight * a_Position;
+        v_Color = vec4((a_Color.rgb * nDotL + vec3(0.1)) , a_Color.a);
+    }
+`;
+var OBJ_FSHADER_SOURCE = `
+    #ifdef GL_ES
+    precision mediump float;
+    #endif
+    uniform sampler2D u_ShadowMap; // 纹理的存储变量
+    varying vec4 v_Color;
+    varying vec4 v_PositionFromLight;
+    float unpackDepth(const in vec4 rgbaDepth) {
+      const vec4 bitShift = vec4(1.0, 1.0 / 256.0, 1.0 / (256.0 * 256.0), 1.0 / (256.0 * 256.0 * 256.0));
+      float depth = dot(rgbaDepth, bitShift);
+      return depth;
+    }
+    void main() {
+        vec3 shadowCoord = (v_PositionFromLight.xyz / v_PositionFromLight.w) / 2.0 + 0.5;
+        vec4 rgbaDepth = texture2D(u_ShadowMap, shadowCoord.xy);
+        float depth = unpackDepth(rgbaDepth);
+        float visibility = (shadowCoord.z > depth + 0.0015) ? 0.7 : 1.0;
+        gl_FragColor = vec4(v_Color.rgb * visibility, v_Color.a);
+        // gl_FragColor = v_Color;
+    }
+`;
+var SHADOW_VSHADER_SOURCE = `
+    attribute vec4 a_Position;
+    uniform mat4 u_MvpMatrix;
+    uniform mat4 u_NormalMatrix;
+    void main() {
+        vec3 lightDirection = vec3(1.0, 1.0, 1.0);
+        // vec3 normal = normalize(vec3(u_NormalMatrix * a_Normal));
+        // float nDotL = max(dot(normal, lightDirection), 0.0);
+        gl_Position = u_MvpMatrix * a_Position;
+    }
+`;
+var SHADOW_FSHADER_SOURCE = `
+    #ifdef GL_ES
+    precision mediump float;
+    #endif
+    void main() {
+        const vec4 bitShift = vec4(1.0, 256.0, 256.0 * 256.0, 256.0 * 256.0 * 256.0);
+        // const vec4 bitMask = vec4(1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0, 0.0);
+        const vec4 bitMask = vec4(1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0, 0.0);
+        // vec4 rgbaDepth = fract(gl_FragCoord.z * bitShift); // fract 返回小数部分
+        vec4 rgbaDepth = fract(gl_FragCoord.z * bitShift);
+        rgbaDepth -= rgbaDepth.gbaa * bitMask;
+        gl_FragColor = rgbaDepth;
+    }
+`;
+// 屏幕分辨率
+// var OFFSCREEN_WIDTH = 2048, OFFSCREEN_HEIGHT = 2048;
+var OFFSCREEN_WIDTH = 1024, OFFSCREEN_HEIGHT = 1024;
+// var LIGHT_X = 0, LIGHT_Y = 40, LIGHT_Z = 2; // Light positio(x, y, z)
+var LIGHT_X = 100, LIGHT_Y = 100, LIGHT_Z = 100;
+=======
     varying vec4 v_Color;
     void main() {
         gl_FragColor = v_Color;
     }
 `;
 
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 
 function main() {
     var canvas = document.getElementById('webgl');
@@ -278,27 +508,132 @@ function main() {
     if (!gl) {console.log('failed gl'); return}
 
     var cubeProgram = createProgram(gl, CUBE_VSHADER_SOURCE, CUBE_FSHADER_SOURCE);
+<<<<<<< HEAD
+    if (!cubeProgram) {console.log('failed cubeProgram'); return;};
+
+=======
 
     if (!cubeProgram) {console.log('failed cubeProgram'); return;};
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
     cubeProgram.a_Position = gl.getAttribLocation(cubeProgram, 'a_Position');
     cubeProgram.a_Normal = gl.getAttribLocation(cubeProgram, 'a_Normal');
     cubeProgram.a_Color = gl.getAttribLocation(cubeProgram, 'a_Color');
     cubeProgram.u_MvpMatrix = gl.getUniformLocation(cubeProgram, 'u_MvpMatrix');
     cubeProgram.u_NormalMatrix = gl.getUniformLocation(cubeProgram, 'u_NormalMatrix');
     cubeProgram.u_lightDirection = gl.getUniformLocation(cubeProgram, 'u_lightDirection');
+<<<<<<< HEAD
+    cubeProgram.u_ShadowMap = gl.getUniformLocation(cubeProgram, 'u_ShadowMap');
+    cubeProgram.u_MvpMatrixFromLight = gl.getUniformLocation(cubeProgram, 'u_MvpMatrixFromLight');
+
+    if (cubeProgram.a_Position < 0 || cubeProgram.a_Color < 0 || cubeProgram.a_Normal < 0 ||
+        cubeProgram.u_MvpMatrix < 0 || cubeProgram.u_NormalMatrix < 0 || cubeProgram.u_ShadowMap < 0
+     || cubeProgram.u_MvpMatrixFromLight < 0) {
+            console.log('failed cubeProgram loaction'); return;
+    }
+
+    var objProgram = createProgram(gl, CUBE_VSHADER_SOURCE, CUBE_FSHADER_SOURCE);
+    if (!objProgram) {console.log('failed cubeProgram'); return;};
+
+    objProgram.a_Position = gl.getAttribLocation(objProgram, 'a_Position');
+    objProgram.a_Normal = gl.getAttribLocation(objProgram, 'a_Normal');
+    objProgram.a_Color = gl.getAttribLocation(objProgram, 'a_Color');
+    objProgram.u_MvpMatrix = gl.getUniformLocation(objProgram, 'u_MvpMatrix');
+    objProgram.u_NormalMatrix = gl.getUniformLocation(objProgram, 'u_NormalMatrix');
+    objProgram.u_lightDirection = gl.getUniformLocation(objProgram, 'u_lightDirection');
+    objProgram.u_ShadowMap = gl.getUniformLocation(objProgram, 'u_ShadowMap');
+    objProgram.u_MvpMatrixFromLight = gl.getUniformLocation(objProgram, 'u_MvpMatrixFromLight');
+
+    if (objProgram.a_Position < 0 || objProgram.a_Color < 0 || objProgram.a_Normal < 0 ||
+        objProgram.u_MvpMatrix < 0 || objProgram.u_NormalMatrix < 0 || objProgram.u_ShadowMap < 0
+     || objProgram.u_MvpMatrixFromLight < 0) {
+            console.log('failed objProgram loaction'); return;
+    }
+
+    var shadowProgram = createProgram(gl, SHADOW_VSHADER_SOURCE, SHADOW_FSHADER_SOURCE);
+    if (!shadowProgram) {console.log('falied shadowProgram'); return;}
+
+    shadowProgram.a_Position = gl.getAttribLocation(shadowProgram, 'a_Position');
+    shadowProgram.u_MvpMatrix = gl.getUniformLocation(shadowProgram, 'u_MvpMatrix');
+    shadowProgram.u_NormalMatrix = gl.getUniformLocation(shadowProgram, 'u_NormalMatrix');
+    if (shadowProgram.a_Position < 0 || shadowProgram.u_MvpMatrix < 0){
+        console.log('falied shadowProgram location'); return;
+    }
+
+
+=======
 
     if (cubeProgram.a_Position < 0 || cubeProgram.a_Color < 0 || cubeProgram.a_Normal < 0 ||
         cubeProgram.u_MvpMatrix < 0 || cubeProgram.u_NormalMatrix < 0) {
             console.log('failed loaction'); return;
         }
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
     
     
 
     var cube = setCube(gl);
+<<<<<<< HEAD
+    if (!cube) {console.log('failed cube'); return;}
+    var plane = initVertexBuffersForPlane(gl);
+    if (!plane) {console.log('failed plane'); return;}
+
+    var fbo = initFramebufferObject(gl);
+    if (!fbo) {console.log('failed fbo'); return};
+
+    var iObj = importObj(gl, objProgram);
+    if (!iObj) {return}
+    readOBJFile('../webGL/WebGL_Guide_Code/ch10/cube.obj', gl, iObj, 60, true);
+
+    gl.activeTexture(gl.TEXTURE0); // 激活指定纹理单元
+    gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
+
+    var viewProjMatrixFromLight = new Matrix4();
+    // LIGHT_X = 0, LIGHT_Y = 200, LIGHT_Z = 0;
+    viewProjMatrixFromLight.setPerspective(80, OFFSCREEN_WIDTH / OFFSCREEN_HEIGHT, 1.0, 200);
+    viewProjMatrixFromLight.lookAt(0, -10, -10, 0, 0, 0, 0, 1, 0);
+
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 
     var viewProjMatrix = new Matrix4();
     viewProjMatrix.setPerspective(30, canvas.width / canvas.height, 1.0, 100); // Perspective 透视图
     viewProjMatrix.lookAt(9, 20, 20, 0, 0, 0, 0, 1, 0); // 视点 ，注视点， 上方向
+<<<<<<< HEAD
+    gl.enable(gl.DEPTH_TEST);
+    gl.clearColor(0, 0, 0, 1);
+    var currentAngle = 30;
+    var mvpMatrix_Light_c = new Matrix4(); // 光源（mf）的模型投影矩阵
+    var mvpMatrix_Light_p = new Matrix4(); // 光源（平面）的模型投影矩阵
+    var tick = function() {
+        currentAngle = animate(currentAngle);
+        
+        // gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+        // gl.viewport(0, 0, OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT);
+        // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        // gl.useProgram(shadowProgram);
+        // // 绘制cube和plane（用于生成阴影贴图）
+        // setDraw(gl, shadowProgram, cube, viewProjMatrixFromLight, currentAngle);
+        // mvpMatrix_Light_c.set(g_mvpMatrix); //
+        // drawPlane(gl, shadowProgram, plane, viewProjMatrixFromLight);
+        // // drawPlane(gl, program, plane, viewProjMatrix)
+        // mvpMatrix_Light_p.set(g_mvpMatrix); // 
+
+        // // 解阶乘帧缓冲区绑定， 绘制成常颜色缓冲区
+        // gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.useProgram(cubeProgram);
+        gl.uniform1i(cubeProgram.u_ShadowMap, 0);
+
+        // gl.uniformMatrix4fv(cubeProgram.u_MvpMatrixFromLight, false, mvpMatrix_Light_c.elements);
+        setDraw(gl, cubeProgram, cube, viewProjMatrix, currentAngle);
+
+        // gl.viewport(0, 0, canvas.width, canvas.height);
+        // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.useProgram(objProgram);
+        drawObj(gl, objProgram, iObj, viewProjMatrix);
+        // gl.uniformMatrix4fv(cubeProgram.u_MvpMatrix, false, mvpMatrix_Light_p.elements);
+        // drawPlane(gl, cubeProgram, plane, viewProjMatrix);
+=======
     // console.log(cubeProgram.u_lightDirection);
     var lightDirection = new Vector3([1, 1, 1]);
     lightDirection.normalize(); // 归一化
@@ -310,12 +645,57 @@ function main() {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         currentAngle = animate(currentAngle);
         setDraw(gl, cubeProgram, cube, viewProjMatrix, currentAngle);
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
         requestAnimationFrame(tick, canvas);
         // tick();
     };
     tick();
+<<<<<<< HEAD
+
+    canvas.onmousedown = function(ev) {
+        mouseMove = true;
+        mouseInit = ev;
+        var x = ev.clientX, y = ev.clientY;
+        var rect = ev.target.getBoundingClientRect();
+       //  console.log(rect, x, y);
+        if (rect.left <= x && x < rect.right && rect.top <=y && y < rect.bottom) {
+            mouseInit.lastX = x; mouseInit.lastY = y;
+           //  console.log(rect, y);
+           var x_in_canvas = x - rect.left, y_in_canvas = rect.bottom - y;
+
+        }
+    }
+    canvas.onmouseup = function(ev) {
+        mouseMove = false;
+        mouseInit = {};
+    }
+    canvas.onmousemove = function(ev) {
+        let speend = 1; // 放大倍数
+        if (mouseMove && rotateIsOver) { // 点击了并称到了鼠标 并且对mf的操作停止
+            // 只能判断出在x,y轴上称动的距离
+            var x = ev.clientX, y = ev.clientY;
+             var factor = 200 / canvas.height;
+             var dx = factor * (x - mouseInit.lastX);
+             var dy = factor * (y - mouseInit.lastY);
+
+             currentAngle[0] = Math.max(Math.min(currentAngle[0] + dy, 90.0), -90.0);
+             currentAngle[1] = currentAngle[1] + dx;
+
+             rotateAll.x = Math.max(Math.min(rotateAll.x + dy, 90.0), -90.0);
+             rotateAll.y = rotateAll.y + dx;
+            //  console.log(rotateAll);
+
+             mouseInit.lastX = x; mouseInit.lastY = y;
+        }
+    }
     
 }
+var mouseMove = false; // 用鼠标移动mf整体
+var mouseInit = {}; // 点击时鼠标的状态
+=======
+    
+}
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 
 var g_mvpMatrix = new Matrix4();
 var g_modelMatrix = new Matrix4();
@@ -326,6 +706,41 @@ var LevelMF = [
     [[9, 10, 11], [12, 13, 14], [15, 16, 17]],
     [[18, 19, 20], [21, 22, 23], [24, 25, 26]]
 ]
+<<<<<<< HEAD
+function drawPlane(gl, program, plane, viewProjMatrix) { // 画一个方块
+    g_modelMatrix.setRotate(0, 0, 1, 1);
+    // g_modelMatrix.setScale(1, 1, 1);
+    // g_modelMatrix.translate(0, -20, 0);
+    initAttributeVariable(gl, program.a_Position, plane.vertexBuffer);
+    drawCanvase(gl, program, plane, viewProjMatrix);
+}
+function drawObj(gl, program, obj, viewProjMatrix) {
+    if (g_objDoc != null && g_objDoc.isMTLComplete()){ // OBJ and all MTLs are available
+        g_drawingInfo = onReadComplete(gl, obj, g_objDoc);
+        g_objDoc = null;
+      }
+      console.log(g_drawingInfo);
+      if (!g_drawingInfo) {console.log('????');return};
+    // initAttributeVariable(gl, program.a_Position, obj.vertexBuffer);
+    console.log('???', g_drawingInfo);
+    // g_modelMatrix.set
+    g_modelMatrix.setRotate(0, 0, 1, 1);
+    g_normalMatrix.setInverseOf(g_modelMatrix);
+    g_normalMatrix.transpose();
+    gl.uniformMatrix4fv(program.u_NormalMatrix, false, g_normalMatrix.elements);
+
+    // Calculate the model view project matrix and pass it to u_MvpMatrix
+    g_mvpMatrix.set(viewProjMatrix);
+    g_mvpMatrix.multiply(g_modelMatrix);
+    gl.uniformMatrix4fv(program.u_MvpMatrix, false, g_mvpMatrix.elements);
+
+  // Draw
+  // console.log(g_drawingInfo);
+  gl.drawElements(gl.TRIANGLES, g_drawingInfo.indices.length, gl.UNSIGNED_SHORT, 0);
+    // drawCanvase(gl, program, obj, viewProjMatrix);
+}
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 function setDraw(gl, program, cube, viewProjMatrix, currentAngle) { //  用小方块组成大方块
     var p = 0.2;
     // console.log(MFArr);
@@ -345,6 +760,14 @@ function setDraw(gl, program, cube, viewProjMatrix, currentAngle) { //  用小�
 }
 var oldcurrentAngle = 0;
 function drawCube(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex) {
+<<<<<<< HEAD
+    // gl.useProgram(program);
+    initAttributeVariable(gl, program.a_Position, cube.vertexBuffer);
+    initAttributeVariable(gl, program.a_Normal, cube.normalBuffer);
+
+    if (rotateAll.x) {setXRotate(3, rotateAll.x, index, MIdex);}
+    if (rotateAll.x) {setYRotate(3, rotateAll.y, index, MIdex);}
+=======
     gl.useProgram(program);
     initAttributeVariable(gl, program.a_Position, cube.vertexBuffer);
     initAttributeVariable(gl, program.a_Color, cube.colorBuffer);
@@ -412,6 +835,7 @@ function drawCube(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex)
     //     setCoord(arrNew);
     // }
     
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
     if (rotateF.direction) {
         // console.log(rotateF);
         switch(rotateF.direction) {
@@ -424,6 +848,18 @@ function drawCube(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex)
             case 'z':
                 setZRotate(rotateF.zIndex - 0, rotateF.currentAngle, index, MIdex);
             break;
+<<<<<<< HEAD
+            case '-x':
+                setXRotate(rotateF.zIndex - 0, -rotateF.currentAngle, index, MIdex);
+            break;
+            case '-y':
+                setYRotate(rotateF.zIndex - 0, -rotateF.currentAngle, index, MIdex);
+            break;
+            case '-z':
+                setZRotate(rotateF.zIndex - 0, -rotateF.currentAngle, index, MIdex);
+            break;
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
                 default: break;
         }
         // drawCanvase(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex);
@@ -431,13 +867,27 @@ function drawCube(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex)
     // setXRotate(3, currentAngle ,index, MIdex);
     setCubeRotate(index, MIdex);
 
+<<<<<<< HEAD
+    drawCanvase(gl, program, cube, viewProjMatrix);
+=======
     drawCanvase(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex);
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
     
     
     
 }
 
+<<<<<<< HEAD
+function drawCanvase(gl, program, cube, viewProjMatrix) {
+    if (program.a_Color != undefined) {
+        initAttributeVariable(gl, program.a_Color, cube.colorBuffer);
+    }
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cube.indexBuffer);
+
+
+=======
 function drawCanvase(gl, program, cube, viewProjMatrix, currentAngle, index, MIdex) {
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
     g_normalMatrix.setInverseOf(g_modelMatrix);
     g_normalMatrix.transpose();
     gl.uniformMatrix4fv(program.u_NormalMatrix, false, g_normalMatrix.elements);
@@ -463,10 +913,13 @@ function setCubeRotate(zIndex, MIdex) { // 设置各个方块的朝向
         let keyNum = rotateDetail[MIdex][keyw].num;
         let angle = keyNum * 90;
         let cd = rDir[key]; coord = cd;
+<<<<<<< HEAD
+=======
         // if (cd.indexOf('-') > -1) {coord = cd.substring(1); angle = -angle;}
         // if (rotateDetail[MIdex] && rotateDetail[MIdex].length > 1 && keyw > 0 && MIdex == 26) {
         //     // coord = 'y'; angle = -90;
         //     console.log(coord);}
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
         let rotate = arrNew[obj2[key]];
         if (!rotate.key) {angle = -angle}
         switch(obj[rotate.dir]) {
@@ -478,6 +931,10 @@ function setCubeRotate(zIndex, MIdex) { // 设置各个方块的朝向
             case '-z':  g_modelMatrix.rotate(-angle, 0, 0, 1); break;
             default: break;
         }
+<<<<<<< HEAD
+            // rDir = getDir(keyNum, coord);
+            arrNew = setCoord(arrNew, key, keyNum);
+=======
         // if (rotateDetail[MIdex][keyw -1] && rotateDetail[MIdex][keyw] == rotateDetail[MIdex][keyw -1]) {
         //     console.log(rotateDetail[MIdex]);
         // } else {
@@ -485,6 +942,7 @@ function setCubeRotate(zIndex, MIdex) { // 设置各个方块的朝向
             arrNew = setCoord(arrNew, key, keyNum);
             // console.log(arrNew);
         // }
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
     }
     function setCoord(arr, coord, num, dir = 1) { // coord 当前所饶之轴, dir 顺逆时针, num 轴动多少
         // x => 0, y => 1, z => 2
@@ -558,6 +1016,8 @@ function setCubeRotate(zIndex, MIdex) { // 设置各个方块的朝向
         }
         return rDir;
     }
+<<<<<<< HEAD
+=======
     // x ->y
     // x coord = null => coord = x => 旋转 => {x: 'x',y: '-z', z: 'y'}
     // y coord = x => coord = -z => 旋转 => {}
@@ -578,6 +1038,7 @@ function setCubeRotate(zIndex, MIdex) { // 设置各个方块的朝向
     //     let angle = (rotateDetail[MIdex]['x'] || 0) * 90;
     //     g_modelMatrix.rotate(angle, 0, 1, 0);
     // }
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 }
 function setCoord(arr, coord, num, dir = 1) { // coord 当前所饶之轴, dir 顺逆时针, num 轴动多少
     // x => 0, y => 1, z => 2
@@ -755,6 +1216,21 @@ function setYRotate(zI, currentAngle, index) { // 饶Y轴转动
     }
 }
 
+<<<<<<< HEAD
+function importObj(gl, program) {
+    var o = new Object();
+    o.vertexBuffer = createEmptyArrayBuffer(gl, program.a_Position, 3, gl.FLOAT);
+    o.normalBuffer = createEmptyArrayBuffer(gl, program.a_Normal, 3, gl.FLOAT);
+    o.colorBuffer = createEmptyArrayBuffer(gl, program.a_Color, 4, gl.FLOAT);
+    o.indexBuffer = gl.createBuffer();
+    console.log(o);
+    if (!o.vertexBuffer || !o.normalBuffer || !o.colorBuffer || !o.indexBuffer) {
+        console.log('import failed '); return null};
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    return o;
+}
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 
 function setCube(gl) { // 建立模型
     var i, j, k, p, n, position = [], normal, color = [];
@@ -854,6 +1330,99 @@ var normal = [];
     return o;
 }
 
+<<<<<<< HEAD
+function initVertexBuffersForPlane(gl) { // 建立平面
+    // Create a plane
+    //  v3------v2
+    //  |        | 
+    //  |        |
+    //  |        |
+    //  v0------v1
+        
+        var arr = [-30, -45, -20, 10, -45, -20, 10, -45, -70, -30, -45, -70];
+        var arr = [-50, -50, 20, 20, -50, 20, 20, -50, -60, -50, -50, -60];
+    var vertices = new Float32Array([
+        -9, -18, 0, 5, -18, 0, 5, -18, -15, -9, -18, -15
+        // ...arr
+    ]);
+    var colors = new Float32Array([
+        1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
+    ]);
+    var normal = new Float32Array([
+        0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0
+    ]);
+    var indices = new Int8Array([0, 1, 2, 0, 2, 3]);
+    var o = new Object();
+
+    o.vertexBuffer = initArrayBufferForLaterUse(gl, vertices, 3, gl.FLOAT);
+    o.colorBuffer = initArrayBufferForLaterUse(gl, colors, 3, gl.FLOAT);
+    o.normalBuffer = initArrayBufferForLaterUse(gl, normal, 3, gl.FLOAT);
+    o.indexBuffer = initElementArrayBufferForLateUse(gl, indices, gl.UNSIGNED_BYTE);
+    
+    o.numIndex = indices.length;
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+    return o;
+}
+
+function initFramebufferObject(gl) { // 建立fbo 帧缓冲
+    var framebuffer, texture, depthBuffer;
+    
+    var error = function() {// 失败后销毁方法
+        if (framebuffer) { gl.deleteFramebuffer(framebuffer)}
+        if (texture) {gl.deleteTexture(texture);}
+        if (depthBuffer) {gl.deleteRenderbuffer(depthBuffer)};
+    }
+
+    framebuffer = gl.createFramebuffer(); // 帧缓冲
+    if (!framebuffer) {console.log('Failed frame buffer'); return error();};
+
+    texture = gl.createTexture(); // 纹理
+    if (!texture) {console.log('Failed texture object'); return error();}
+    gl.bindTexture(gl.TEXTURE_2D, texture); // 绑定纹理
+    // 指定二维纹理图像 0 border
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA /** internalformat 指定纹理中的颜色组件 */,
+         OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT,
+         0, /** boder 必需为0 */
+         gl.RGBA, /** format 指定texel(纹理影像元件)数据格式 */
+         gl.UNSIGNED_BYTE, /** type 指定texel 数据类型 */ null);
+    // 设置纹理参数 gl.gl.TEXTURE_MAX_FILTER 纹理放大滤波器  TEXTURE_MIN_FILTER纹理缩小滤波器
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+    depthBuffer = gl.createRenderbuffer(); // 深度缓冲 渲染缓冲
+    if(!depthBuffer) { console.log('Failed depthBuffer'); return error();}
+
+    gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer); // 绑定渲染缓冲区
+    // 建和初始化一个渲染缓冲区对象的数据存储.
+    gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16 /** internalFormat 渲染缓冲区的内部格式 */,
+         OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT);
+    
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer); // 绑定帧缓冲区
+    // 将纹理设置到帧缓冲区
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+    // 将渲染缓冲区设置到帧缓冲区
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
+
+    var e = gl.checkFramebufferStatus(gl.FRAMEBUFFER); // 检查 帧缓冲区状态 checkFramebufferStatus
+    if (gl.FRAMEBUFFER_COMPLETE !== e) {
+        console.log('frame buffer object is incomplete:' + e.toString());
+        return error();
+    }
+
+    framebuffer.texture = texture;
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+
+    return framebuffer;
+
+}
+
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 /**
  * 工具函数
  */

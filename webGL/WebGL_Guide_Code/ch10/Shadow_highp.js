@@ -157,6 +157,11 @@ function main() {
 
 // Coordinate transformation matrix
 var g_modelMatrix = new Matrix4();
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 var g_mvpMatrix = new Matrix4();
 function drawTriangle(gl, program, triangle, angle, viewProjMatrix) {
   // Set rotate angle to model matrix and draw triangle

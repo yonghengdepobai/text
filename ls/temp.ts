@@ -168,7 +168,11 @@ class TwentyFour {
                     stepIconInnerText = currentValue[options.props.icon] 
                         ? currentValue[options.props.icon]
                         : index + 1;
+<<<<<<< HEAD
+                }                                                                                                                                                                                                                                                                                                                                                                           
+=======
                 }
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 
                 var stepHtml, lineStyle = '', titleStyle = '', descStyle = '',
                     lineIndex = options.dataOrder.indexOf("line"),

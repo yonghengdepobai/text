@@ -59,7 +59,11 @@ transition-property: none | all | [ <IDENT(元素属性名)> ] [',' <IDENT>]
 
 BFC即Block Fromatting Context(块级格式化上下文)
 是web页面中盒模型布局的CSS渲染模式，指一个独立的渲染区域或者说是一个隔离的独立容器
+<<<<<<< HEAD
+形成BFC的条件
+=======
 形成BFC的条开
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 1.浮动元素，float除none以外的值
 2.定位元素，positon(absolute, fixed)
 3.display为以下其中之一的值inline-block，table-cell, table-caption;
@@ -195,5 +199,75 @@ css clear 属性规定元素的哪一侧不允许其他浮动元素
     区别 它们是否创造了新元素（抽象）伪类用一个冒号 伪元素用两个
 
 
+<<<<<<< HEAD
+CSS 长度值
+em 相对父元素的字体大小
+ex 相对于小写字母‘x'的高度
+gd 一般用在东亚字体排版上，这个与英文并无关系
+rem 相对根元素字体大小
+vw 相对于视窗的宽度：视窗的宽度是100vw
+vh 相对于视窗的高度：视窗高度是100vh
+vm 相对视窗的宽度或高度，取决于哪个更小
+ch 相对于0尺寸
+px 相对于屏幕分辨率而不是视窗大小：通常为1个点或1/72英寸
+in inch表英寸
+cm centimeter 表厘米
+mm millimeter 表毫米
+pt 1/72英寸
+pc 12点活字，或1/12点
+% 相对于父元素
+
+deg degress 角度
+grad grads, 百分度
+rad radians 弧度
+turn turns, 圈数
+ms milliseconds, 毫秒数
+s seconds 秒
+Hz Hertz, 
+KHz
+
+
+meta 标签
+元数据（metadata）是关于数据信息的
+标签提供关于HTML文档的元数据。元数据不会显示在页面上，但是对于机器是可读的
+典型的情况是，meta元素被用于规定页面的描述、关键词、文档的作者、最后修改时候以及其他的元数据
+标签始终位于head元素中
+元数据可用于浏览器（如何显示内容或重新加载页面），搜索引擎，或其他web服务
+meta的作用
+    meta里的数据是供机器读的，告诉机器该如何解析这个页面，还有一个用途是可以添加服务器发送到浏览器的http头部内容，例如我们：
+    <meta http-equiv='charset' content='iso-8859-1'>
+    <meta http-equiv='expires' content='31 Dec 2008'>
+    那么浏览器头部就会包括这些 charset: iso-8859-1 expires:31 Dec 2008
+
+必需属性content
+meta的必需属性是content,并不是meta标签里一定要有content，而是当有http-equiv或name属性时，一定要有content属性对其进行说明
+例如： <meta name="keywords" content="HTML,ASP,PHP,SQL">
+
+charset是声明文档使用的字符编码，解决乱码问题主要用的就是它，必需放在第一行
+百度禁止转码 <meta http-equiv="Cache-Control" content="no-siteapp" />
+SEO 优化部分
+
+<meta name="keywords" content="your keywords">
+<!-- 页面描述内容 description -->
+<meta name="description" content="your description">
+<!-- 定义网页作者 author -->
+<meta name="author" content="author,email address">
+<!-- 定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和follow。 -->
+<meta name="robots" content="index,follow">
+
+viewport 主要影响移动端页面布局，例如
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    content 参数：
+        width viewport 宽度(数值/device-width)
+        height viewport 高度(数值/device-height)
+        initial-scale 初始缩放比例
+        maximum-scale 最大缩放比例
+        minimum-scale 最小缩放比例
+        user-scalable 是否允许用户缩放(yes/no)
+
+ 
+
+=======
+>>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 
 
