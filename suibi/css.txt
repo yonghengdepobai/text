@@ -59,11 +59,7 @@ transition-property: none | all | [ <IDENT(元素属性名)> ] [',' <IDENT>]
 
 BFC即Block Fromatting Context(块级格式化上下文)
 是web页面中盒模型布局的CSS渲染模式，指一个独立的渲染区域或者说是一个隔离的独立容器
-<<<<<<< HEAD
 形成BFC的条件
-=======
-形成BFC的条开
->>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 1.浮动元素，float除none以外的值
 2.定位元素，positon(absolute, fixed)
 3.display为以下其中之一的值inline-block，table-cell, table-caption;
@@ -199,7 +195,6 @@ css clear 属性规定元素的哪一侧不允许其他浮动元素
     区别 它们是否创造了新元素（抽象）伪类用一个冒号 伪元素用两个
 
 
-<<<<<<< HEAD
 CSS 长度值
 em 相对父元素的字体大小
 ex 相对于小写字母‘x'的高度
@@ -267,7 +262,5 @@ viewport 主要影响移动端页面布局，例如
 
  
 
-=======
->>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 
 

@@ -1,8 +1,6 @@
-<<<<<<< HEAD
+
 (webAssembly和actionscript) 后面了解
 
-=======
->>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 页面加载优化
     1.减少HTTP请求 优化图片
     2.使用CDN
@@ -13,11 +11,7 @@
         优化cookie
 
 自适应布局
-<<<<<<< HEAD
-    1.浮动布局 float:left|right
-=======
     1.浮云布局 float:left|right
->>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
         <div class='rwd-header'>Header</div>
         <div class='rwd-content'>
             <div class='rwd-content-left'>Left</div>
@@ -223,7 +217,6 @@ URL 资源统一定位符 协议 域名/IP 资源路径 DNS（域名服务器）
         而onload事件要等页面所有元素，包括图片以及脚本等全部加载完成才触发，因此它比DOMContentLoaded要更晚执行
 
 
-<<<<<<< HEAD
 HTML文档中的所有元素和样式以及DOM都位于一个全局范围内。页面上的任何元素都可以通过document.querySelector()方法访问
 创建Shadow DOM是为了允许在Web平台上本地封装和组件化，而不必依赖<iframe>这样的工具
 可以将shadow DOM 视为DOM中的DOM。它是独立的DOM树，具有自已的元素和样式，与原始DOM完全隔离
@@ -269,7 +262,5 @@ codebase="http://www.adobe.com/svg/viewer/install/" /> codebase 属性指向下�
 浏览器的js引擎与DOM引擎共享一个主线程。任何 DOM API调用都要先将JS数据结构转为 DOM数据结构，再挂起js引擎，执行过后再把可能
 的返回值反转数据结构，重启JS引擎继续执行。这种上下文切换很耗性能
 很多DOM API的读写操作都涉及到页面布局的重新计算，以确保返回值的准确，涉及样式、结构的还会触发页面重新绘制，更耗性能
-=======
->>>>>>> 7f55bc3a195bb539551e05059063c2adcd85f58e
 
 
